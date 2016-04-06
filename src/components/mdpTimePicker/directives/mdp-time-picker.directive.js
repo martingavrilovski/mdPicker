@@ -67,7 +67,7 @@
                 if (time && time.isValid()){
                     updateInputElement(time.format(scope.timeFormat));
                 }else{
-                    updateInputElement();
+                    updateInputElement('');
                 }
             });
 
