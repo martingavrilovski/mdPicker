@@ -69,8 +69,11 @@
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
                 var date = angular.isDate(value) && moment(value);
-                if (date && date.isValid())
+                if (date && date.isValid()){
                     updateInputElement(date.format(scope.dateFormat));
+                }else{
+                    updateInputElement();
+                }
             });
 
             ngModel.$validators.format = function(modelValue, viewValue) {
@@ -107,9 +110,12 @@
 
             // update input element value
             function updateInputElement(value) {
-                if (ngModel.$valid)
+                if (value){
                     inputElement[0].size = value.length + 1;
-                inputElement[0].value = value;
+                    inputElement[0].value = value;
+                }else{
+                    inputElement[0].value = '';
+                }
                 inputContainerCtrl.setHasValue(!ngModel.$isEmpty(value));
             }
 
