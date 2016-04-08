@@ -93,7 +93,7 @@
 
             // update input element value
             function updateInputElement(value) {
-                if (ngModel.$valid){
+                if (value){
                     inputElement[0].size = value.length + 1;
                     inputElement[0].value = value;
                 }else{

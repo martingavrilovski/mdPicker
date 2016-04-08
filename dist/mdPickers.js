@@ -567,61 +567,6 @@
 
     angular
         .module('mdPickers')
-        .factory('mdpDatePickerService', mdpDatePickerService);
-
-    /** @ngInject */
-    function mdpDatePickerService() {
-
-        var service = {
-            formatValidator: formatValidator,
-            minDateValidator: minDateValidator,
-            maxDateValidator: maxDateValidator,
-            filterValidator: filterValidator
-        };
-
-        return service;
-
-        function formatValidator(value, format) {
-            return !value || angular.isDate(value) || moment(value, format, true).isValid();
-        }
-
-        function minDateValidator(value, format, minDate) {
-            minDate = moment(minDate, "YYYY-MM-DD", true);
-            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
-
-            return !value ||
-                angular.isDate(value) ||
-                !minDate.isValid() ||
-                date.isAfter(minDate);
-        }
-
-        function maxDateValidator(value, format, maxDate) {
-            maxDate = moment(maxDate, "YYYY-MM-DD", true);
-            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
-
-            return !value ||
-                angular.isDate(value) ||
-                !maxDate.isValid() ||
-                date.isBefore(maxDate);
-        }
-
-        function filterValidator(value, format, filter) {
-            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
-
-            return !value ||
-                angular.isDate(value) ||
-                !angular.isFunction(filter) ||
-                !filter(date);
-        }
-
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('mdPickers')
         .provider("$mdpDatePicker", $mdpDatePicker);
 
     /** @ngInject */
@@ -673,6 +618,61 @@
         this.$get.$inject = ["$mdDialog"];
     }
 
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('mdPickers')
+        .factory('mdpDatePickerService', mdpDatePickerService);
+
+    /** @ngInject */
+    function mdpDatePickerService() {
+
+        var service = {
+            formatValidator: formatValidator,
+            minDateValidator: minDateValidator,
+            maxDateValidator: maxDateValidator,
+            filterValidator: filterValidator
+        };
+
+        return service;
+
+        function formatValidator(value, format) {
+            return !value || angular.isDate(value) || moment(value, format, true).isValid();
+        }
+
+        function minDateValidator(value, format, minDate) {
+            minDate = moment(minDate, "YYYY-MM-DD", true);
+            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
+
+            return !value ||
+                angular.isDate(value) ||
+                !minDate.isValid() ||
+                date.isAfter(minDate);
+        }
+
+        function maxDateValidator(value, format, maxDate) {
+            maxDate = moment(maxDate, "YYYY-MM-DD", true);
+            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
+
+            return !value ||
+                angular.isDate(value) ||
+                !maxDate.isValid() ||
+                date.isBefore(maxDate);
+        }
+
+        function filterValidator(value, format, filter) {
+            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
+
+            return !value ||
+                angular.isDate(value) ||
+                !angular.isFunction(filter) ||
+                !filter(date);
+        }
+
+    }
 })();
 
 (function() {
@@ -1038,7 +1038,7 @@
 
             // update input element value
             function updateInputElement(value) {
-                if (ngModel.$valid){
+                if (value){
                     inputElement[0].size = value.length + 1;
                     inputElement[0].value = value;
                 }else{
