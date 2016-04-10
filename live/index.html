@@ -13,11 +13,11 @@
     body {
         font-family: 'Roboto', sans-serif;
     }
-
+    
     #content {
         height: 100%;
     }
-
+    
     #content > md-content {
         background-color: #eee;
     }
@@ -33,22 +33,22 @@
             </div>
         </md-toolbar>
         <md-content flex layout="column" layout-align="center center" layout-padding>
-            <h3><a href="https://github.com/alenaksu/mdPickers">https://github.com/alenaksu/mdPickers</a></h3>
             <div layout="row" ng-form="demoForm">
                 <div layout-padding>
                     <h2>Date picker</h2>
                     <div>
                         <h4 class="md-subhead">Standard date picker</h4>
                         <mdp-date-picker mdp-placeholder="Date" ng-model="currentDate"></mdp-date-picker>
-                        <input type="checkbox" ng-model="isEnabledDate" ng-change="onChangeCheckbox(currentDate, isEnabledDate)"></input>
                     </div>
                     <div>
                         <h4 class="md-subhead">Standard date picker (disabled)</h4>
-                        <mdp-date-picker mdp-disabled mdp-placeholder="Date" ng-model="currentDate"></mdp-date-picker>
+                        <mdp-date-picker mdp-disabled="!isEnabledDate" mdp-placeholder="Date" ng-model="toggleDate"></mdp-date-picker>
+                        Enable date:
+                        <input type="checkbox" ng-model="isEnabledDate"></input>
                     </div>
                     <div>
                         <h4 class="md-subhead">Custom format + error messages</h4>
-                        <mdp-date-picker required name="dateFormat" mdp-format="DD/MM/YYYY" mdp-placeholder="Date (DD/MM/YYYY)" ng-model="currentDateFormat">
+                        <mdp-date-picker required name="dateFormat" mdp-format="DD.MM.YYYY" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="currentDateFormat">
                             <div ng-messages="demoForm.dateFormat.$error">
                                 <div ng-message="required">This is required</div>
                                 <div ng-message="format">Invalid format</div>
@@ -57,7 +57,9 @@
                     </div>
                     <div>
                         <h4 class="md-subhead">Min/max date</h4>
-                        <mdp-date-picker mdp-placeholder="Date" min="'2000-01-01'" max="'2005-01-01'" ng-model="currentDateMinMax"></mdp-date-picker>
+                        <mdp-date-picker mdp-placeholder="Date (DD.MM.YYYY)" mdp-min-date="minDate" mdp-max-date="maxDate" ng-model="dateModel" mdp-format="DD.MM.YYYY"></mdp-date-picker>
+                        Remove model:
+                        <input type="checkbox" ng-model="isEnabledMinMax" ng-change="onChangeCheckbox(isEnabledMinMax)"></input>
                     </div>
                     <div>
                         <h4 class="md-subhead">Filtering date</h4>
@@ -75,25 +77,28 @@
                     <h2>Time picker</h2>
                     <div>
                         <h4 class="md-subhead">Standard time picker</h4>
-                        <mdp-time-picker ng-model="currentTime"></mdp-time-picker>
-                        <input type="checkbox" ng-model="isEnabled" ng-change="onChangeCheckbox(currentTime, isEnabled)"></input>
+                        <mdp-time-picker mdp-placeholder="Time" ng-model="currentTime"></mdp-time-picker>
                     </div>
                     <div>
                         <h4 class="md-subhead">Standard time picker (disabled)</h4>
-                        <mdp-time-picker mdp-disabled ng-model="currentTime"></mdp-time-picker>
+                        <mdp-time-picker mdp-disabled="!isEnabledTime" ng-model="currentTime" mdp-placeholder="Time (HH:MM)"></mdp-time-picker>
+                        Enable time:
+                        <input type="checkbox" ng-model="isEnabledTime"></input>
                     </div>
                     <div>
                         <h4 class="md-subhead">Auto switch between hours and minutes</h4>
-                        <mdp-time-picker mdp-auto-switch="true" ng-model="currentTime"></mdp-time-picker>
+                        <mdp-time-picker mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" mdp-auto-switch="true" ng-model="currentTime"></mdp-time-picker>
                     </div>
                     <div>
                         <h4 class="md-subhead">Custom format + error messages</h4>
-                        <mdp-time-picker name="timeFormat" required ng-model="currentTimeText" mdp-format="HH:mm A">
+                        <mdp-time-picker name="timeFormat" required ng-model="currentTimeText" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
                             <div ng-messages="demoForm.timeFormat.$error">
                                 <div ng-message="required">This is required</div>
                                 <div ng-message="format">Invalid format</div>
                             </div>
                         </mdp-time-picker>
+                        Remove model:
+                        <input type="checkbox" ng-model="isEnabledCustom" ng-change="onChangeCheckbox(isEnabledCustom, currentTimeText)"></input>
                     </div>
                     <div>
                         <h4 class="md-subhead">Using $mdpTimePicker service</h4>
@@ -128,15 +133,35 @@
             '$mdpDatePicker',
             '$mdpTimePicker',
             function($scope, $mdpDatePicker, $mdpTimePicker) {
-                window.scope = $scope;
+                $scope.maxDate = new Date();
+                $scope.minDate = moment().subtract(6, 'days');
 
-                $scope.onChangeCheckbox = function(currentTime, isEnabled){
-                    debugger;
+                $scope.onChangeCheckbox = function(isEnabled) {
                     if (!isEnabled) {
-                        delete $scope.currentTime;
-                        delete $scope.currentDate;
+                        delete $scope.dateModel;
+                        delete $scope.currentTimeText;
                     }
                 }
+
+                $scope.showDatePicker = function(ev) {
+                    $mdpDatePicker($scope.currentDate, {
+                        targetEvent: ev
+                    }).then(function(selectedDate) {
+                        $scope.currentDate = selectedDate;
+                    });;
+                };
+
+                $scope.filterDate = function(date) {
+                    return moment(date).date() % 2 == 0;
+                };
+
+                $scope.showTimePicker = function(ev) {
+                    $mdpTimePicker($scope.currentTime, {
+                        targetEvent: ev
+                    }).then(function(selectedDate) {
+                        $scope.currentTime = selectedDate;
+                    });;
+                };
             }
         ]);
     }());

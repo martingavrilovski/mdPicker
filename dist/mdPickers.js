@@ -640,36 +640,39 @@
         return service;
 
         function formatValidator(value, format) {
-            return !value || angular.isDate(value) || moment(value, format, true).isValid();
+            var notVal = !value, isDate=angular.isDate(value), isValid=moment(value, format).isValid();
+            return notVal || isDate || isValid;
         }
 
         function minDateValidator(value, format, minDate) {
-            minDate = moment(minDate, "YYYY-MM-DD", true);
-            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
+            if (minDate) {
+                minDate = moment(minDate);
+                var date = angular.isDate(value) ? moment(value) : moment(value, format);
 
-            return !value ||
-                angular.isDate(value) ||
-                !minDate.isValid() ||
-                date.isAfter(minDate);
+                var notVal = !value, isDate = angular.isDate(value), minDateValid = !minDate.isValid(), isAfter = date.isAfter(minDate);
+                return notVal || isDate || minDateValid || isAfter;
+            }
+            return true;
         }
 
         function maxDateValidator(value, format, maxDate) {
-            maxDate = moment(maxDate, "YYYY-MM-DD", true);
-            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
+            if (maxDate) {
+                maxDate = moment(maxDate);
+                var date = angular.isDate(value) ? moment(value) : moment(value, format);
 
-            return !value ||
-                angular.isDate(value) ||
-                !maxDate.isValid() ||
-                date.isBefore(maxDate);
+                var notVal = !value, isDate = angular.isDate(value), maxDateValid = !maxDate.isValid(), isBefore = date.isBefore(maxDate);
+                return notVal || isDate || maxDateValid || isBefore;
+            }
+            return true;
         }
 
         function filterValidator(value, format, filter) {
-            var date = angular.isDate(value) ? moment(value) : moment(value, format, true);
-
-            return !value ||
-                angular.isDate(value) ||
-                !angular.isFunction(filter) ||
-                !filter(date);
+            if (filter) {
+                var date = angular.isDate(value) ? moment(value) : moment(value, format);
+                var notVal = !value, isDate=angular.isDate(value), notFunction=!angular.isFunction(filter), notFilter=!filter(date);
+                return notVal || isDate || notFunction || notFilter;
+            }
+            return true;
         }
 
     }
