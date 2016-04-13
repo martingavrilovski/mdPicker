@@ -6,7 +6,8 @@
         .module('mdPickers', [
             'ngMaterial',
             'ngAnimate',
-            'ngAria'
+            'ngAria',
+            'ngMask'
         ])
         .config(configIcons)
         .run(runBlock);

@@ -10,7 +10,8 @@
         .module('mdPickers', [
             'ngMaterial',
             'ngAnimate',
-            'ngAria'
+            'ngAria',
+            'ngMask'
         ])
         .config(configIcons)
         .run(runBlock);
@@ -416,13 +417,24 @@
                 var noFloat = angular.isDefined(attrs.mdpNoFloat),
                     placeholder = angular.isDefined(attrs.mdpPlaceholder) ? attrs.mdpPlaceholder : "",
                     openOnClick = angular.isDefined(attrs.mdpOpenOnClick) ? true : false;
+                    
+                    debugger;
+
+                    var mask = attrs.mdpFormat; 
+                    if(!attrs.mdpFormat){
+                        mask = '9999-19-39';
+                    }else{
+                        mask = mask.replace('YYYY','9999');
+                        mask = mask.replace('MM','19');
+                        mask = mask.replace('DD','39'); 
+                    }
 
                 return '<div layout layout-align="start start">' +
                             '<md-button ng-disabled="disabled" class="md-icon-button" ng-click="showPicker($event)">' +
                                 '<md-icon md-svg-icon="mdp-event"></md-icon>' +
                             '</md-button>' +
                             '<md-input-container' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()" flex>' +
-                                '<input ng-disabled="disabled" type="{{ type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
+                                '<input ng-disabled="disabled" mask="'+mask+'" ng-model="'+attrs.ngModel+'" type="{{ type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
                             '</md-input-container>' +
                         '</div>';
             },
@@ -454,7 +466,7 @@
 
             var messages = angular.element(inputContainer[0].querySelector('[ng-messages]'));
 
-            scope.type = scope.dateFormat ? 'text' : 'date';
+            scope.type = 'text';
             scope.dateFormat = scope.dateFormat || 'YYYY-MM-DD';
             scope.model = ngModel;
 
