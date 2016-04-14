@@ -48,7 +48,7 @@
                 'openOnClick': '=mdpOpenOnClick',
                 'disabled': '=?mdpDisabled',
                 'mdpMask': '=',
-                'model': '=model'
+                'mdpModel': '=mdpModel'
             },
             link: {
                 post: postLink
@@ -154,8 +154,8 @@
                 ngModel.$render();
             }
             
-            if (scope.model) {
-                var value = moment(scope.model, angular.isDate(scope.model) ? null : scope.dateFormat, true);
+            if (scope.mdpModel) {
+                var value = moment(scope.mdpModel, angular.isDate(scope.mdpModel) ? null : scope.dateFormat, true);
                 scope.strValue = value.format(scope.dateFormat);
             }
             // updateDate(scope.model);

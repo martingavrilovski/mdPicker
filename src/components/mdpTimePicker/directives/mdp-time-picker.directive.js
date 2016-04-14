@@ -44,7 +44,7 @@
                 'autoSwitch': '=?mdpAutoSwitch',
                 'disabled': '=?mdpDisabled',
                 'mdpMask': '=',
-                'model': '='
+                'mdpModel': '=mdpModel'
             },
             link: linkFn
         };
@@ -135,9 +135,10 @@
 
                 ngModel.$render();
             }
+            
 
-            if(scope.model){
-                var value = moment(scope.model, angular.isDate(scope.model) ? null : scope.timeFormat, true);
+            if(scope.mdpModel){
+                var value = moment(scope.mdpModel, angular.isDate(scope.mdpModel) ? null : scope.timeFormat, true);
                 scope.strValue = value.format(scope.timeFormat);
             }
             
