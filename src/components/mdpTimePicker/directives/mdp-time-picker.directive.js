@@ -16,12 +16,25 @@
                     placeholder = angular.isDefined(attrs.mdpPlaceholder) ? attrs.mdpPlaceholder : "",
                     openOnClick = angular.isDefined(attrs.mdpOpenOnClick) ? true : false;
 
+                var mask = '';
+                if (attrs.mdpMask==='true') {
+                    mask = attrs.mdpFormat; 
+                    if(!attrs.mdpFormat){
+                        mask = '29:59';
+                    }else{
+                        mask = mask.replace('HH','29');
+                        mask = mask.replace('mm','59');
+                        mask = mask.replace('ss','59'); 
+                    }
+                    mask = ' mask="' + mask + '" restrict="reject"'
+                }
+
                 return '<div layout layout-align="start start">' +
                             '<md-button ng-disabled="disabled" class="md-icon-button" ng-click="showPicker($event)">' +
                                 '<md-icon md-svg-icon="mdp-access-time"></md-icon>' +
                             '</md-button>' +
                             '<md-input-container flex' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()">' +
-                                '<input ng-disabled="disabled" type="{{ ::type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
+                                '<input ng-disabled="disabled"'+ mask +' ng-model="somemodel" type="{{ ::type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
                             '</md-input-container>' +
                         '</div>';
             },
@@ -29,7 +42,8 @@
                 'timeFormat': '@mdpFormat',
                 'placeholder': '@mdpPlaceholder',
                 'autoSwitch': '=?mdpAutoSwitch',
-                'disabled': '=?mdpDisabled'
+                'disabled': '=?mdpDisabled',
+                'mdpMask': '='
             },
             link: linkFn
         };
@@ -47,7 +61,7 @@
 
             var messages = angular.element(inputContainer[0].querySelector('[ng-messages]'));
 
-            scope.type = scope.timeFormat ? 'text' : 'time';
+            scope.type = 'text';
             scope.timeFormat = scope.timeFormat || 'HH:mm';
             scope.autoSwitch = scope.autoSwitch || false;
 
@@ -76,6 +90,7 @@
             };
 
             ngModel.$parsers.unshift(function(value) {
+
                 var parsed = moment(value, scope.timeFormat, true);
                 if (parsed.isValid()) {
                     if (angular.isDate(ngModel.$modelValue)) {
@@ -109,10 +124,10 @@
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
-                } else {
+                } /*else {
                     updateInputElement(time);
                     ngModel.$setViewValue(time);
-                }
+                }*/
 
                 if (!ngModel.$pristine &&
                     messages.hasClass('md-auto-hide') &&

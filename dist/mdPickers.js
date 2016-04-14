@@ -417,16 +417,17 @@
                 var noFloat = angular.isDefined(attrs.mdpNoFloat),
                     placeholder = angular.isDefined(attrs.mdpPlaceholder) ? attrs.mdpPlaceholder : "",
                     openOnClick = angular.isDefined(attrs.mdpOpenOnClick) ? true : false;
-                    
-                    debugger;
-
-                    var mask = attrs.mdpFormat; 
-                    if(!attrs.mdpFormat){
-                        mask = '9999-19-39';
-                    }else{
-                        mask = mask.replace('YYYY','9999');
-                        mask = mask.replace('MM','19');
-                        mask = mask.replace('DD','39'); 
+                    var mask = '';
+                    if (attrs.mdpMask==='true') {
+                        mask = attrs.mdpFormat; 
+                        if(!attrs.mdpFormat){
+                            mask = '9999-19-39';
+                        }else{
+                            mask = mask.replace('YYYY','9999');
+                            mask = mask.replace('MM','19');
+                            mask = mask.replace('DD','39'); 
+                        }
+                        mask = ' mask="' + mask + '" restrict="reject" '
                     }
 
                 return '<div layout layout-align="start start">' +
@@ -434,7 +435,7 @@
                                 '<md-icon md-svg-icon="mdp-event"></md-icon>' +
                             '</md-button>' +
                             '<md-input-container' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()" flex>' +
-                                '<input ng-disabled="disabled" mask="'+mask+'" ng-model="'+attrs.ngModel+'" type="{{ type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
+                                '<input ng-disabled="disabled"'+mask+' ng-model="somemodel" type="{{ type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
                             '</md-input-container>' +
                         '</div>';
             },
@@ -446,7 +447,8 @@
                 'placeholder': '@mdpPlaceholder',
                 'noFloat': '=mdpNoFloat',
                 'openOnClick': '=mdpOpenOnClick',
-                'disabled': '=?mdpDisabled'
+                'disabled': '=?mdpDisabled',
+                'mdpMask': '='
             },
             link: {
                 post: postLink
@@ -506,7 +508,9 @@
 
             ngModel.$parsers.unshift(function(value) {
                 var parsed = moment(value, scope.dateFormat, true);
+                
                 if (parsed.isValid()) {
+
                     if (angular.isDate(ngModel.$modelValue)) {
                         var originalModel = moment(ngModel.$modelValue);
                         originalModel.year(parsed.year());
@@ -515,6 +519,7 @@
 
                         parsed = originalModel;
                     }
+
                     return parsed.toDate();
                 } else
                     return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
@@ -976,12 +981,25 @@
                     placeholder = angular.isDefined(attrs.mdpPlaceholder) ? attrs.mdpPlaceholder : "",
                     openOnClick = angular.isDefined(attrs.mdpOpenOnClick) ? true : false;
 
+                var mask = '';
+                if (attrs.mdpMask==='true') {
+                    mask = attrs.mdpFormat; 
+                    if(!attrs.mdpFormat){
+                        mask = '29:59';
+                    }else{
+                        mask = mask.replace('HH','29');
+                        mask = mask.replace('mm','59');
+                        mask = mask.replace('ss','59'); 
+                    }
+                    mask = ' mask="' + mask + '" restrict="reject"'
+                }
+
                 return '<div layout layout-align="start start">' +
                             '<md-button ng-disabled="disabled" class="md-icon-button" ng-click="showPicker($event)">' +
                                 '<md-icon md-svg-icon="mdp-access-time"></md-icon>' +
                             '</md-button>' +
                             '<md-input-container flex' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()">' +
-                                '<input ng-disabled="disabled" type="{{ ::type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
+                                '<input ng-disabled="disabled"'+ mask +' ng-model="somemodel" type="{{ ::type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
                             '</md-input-container>' +
                         '</div>';
             },
@@ -989,7 +1007,8 @@
                 'timeFormat': '@mdpFormat',
                 'placeholder': '@mdpPlaceholder',
                 'autoSwitch': '=?mdpAutoSwitch',
-                'disabled': '=?mdpDisabled'
+                'disabled': '=?mdpDisabled',
+                'mdpMask': '='
             },
             link: linkFn
         };
@@ -1007,7 +1026,7 @@
 
             var messages = angular.element(inputContainer[0].querySelector('[ng-messages]'));
 
-            scope.type = scope.timeFormat ? 'text' : 'time';
+            scope.type = 'text';
             scope.timeFormat = scope.timeFormat || 'HH:mm';
             scope.autoSwitch = scope.autoSwitch || false;
 
@@ -1036,6 +1055,7 @@
             };
 
             ngModel.$parsers.unshift(function(value) {
+
                 var parsed = moment(value, scope.timeFormat, true);
                 if (parsed.isValid()) {
                     if (angular.isDate(ngModel.$modelValue)) {
@@ -1069,10 +1089,10 @@
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
-                } else {
+                } /*else {
                     updateInputElement(time);
                     ngModel.$setViewValue(time);
-                }
+                }*/
 
                 if (!ngModel.$pristine &&
                     messages.hasClass('md-auto-hide') &&

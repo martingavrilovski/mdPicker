@@ -16,16 +16,17 @@
                 var noFloat = angular.isDefined(attrs.mdpNoFloat),
                     placeholder = angular.isDefined(attrs.mdpPlaceholder) ? attrs.mdpPlaceholder : "",
                     openOnClick = angular.isDefined(attrs.mdpOpenOnClick) ? true : false;
-                    
-                    debugger;
-
-                    var mask = attrs.mdpFormat; 
-                    if(!attrs.mdpFormat){
-                        mask = '9999-19-39';
-                    }else{
-                        mask = mask.replace('YYYY','9999');
-                        mask = mask.replace('MM','19');
-                        mask = mask.replace('DD','39'); 
+                    var mask = '';
+                    if (attrs.mdpMask==='true') {
+                        mask = attrs.mdpFormat; 
+                        if(!attrs.mdpFormat){
+                            mask = '9999-19-39';
+                        }else{
+                            mask = mask.replace('YYYY','9999');
+                            mask = mask.replace('MM','19');
+                            mask = mask.replace('DD','39'); 
+                        }
+                        mask = ' mask="' + mask + '" restrict="reject" '
                     }
 
                 return '<div layout layout-align="start start">' +
@@ -33,7 +34,7 @@
                                 '<md-icon md-svg-icon="mdp-event"></md-icon>' +
                             '</md-button>' +
                             '<md-input-container' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()" flex>' +
-                                '<input ng-disabled="disabled" mask="'+mask+'" ng-model="'+attrs.ngModel+'" type="{{ type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
+                                '<input ng-disabled="disabled"'+mask+' ng-model="somemodel" type="{{ type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
                             '</md-input-container>' +
                         '</div>';
             },
@@ -45,7 +46,8 @@
                 'placeholder': '@mdpPlaceholder',
                 'noFloat': '=mdpNoFloat',
                 'openOnClick': '=mdpOpenOnClick',
-                'disabled': '=?mdpDisabled'
+                'disabled': '=?mdpDisabled',
+                'mdpMask': '='
             },
             link: {
                 post: postLink
@@ -105,7 +107,9 @@
 
             ngModel.$parsers.unshift(function(value) {
                 var parsed = moment(value, scope.dateFormat, true);
+                
                 if (parsed.isValid()) {
+
                     if (angular.isDate(ngModel.$modelValue)) {
                         var originalModel = moment(ngModel.$modelValue);
                         originalModel.year(parsed.year());
@@ -114,6 +118,7 @@
 
                         parsed = originalModel;
                     }
+
                     return parsed.toDate();
                 } else
                     return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
