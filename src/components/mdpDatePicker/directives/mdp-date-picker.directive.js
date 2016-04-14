@@ -34,7 +34,7 @@
                                 '<md-icon md-svg-icon="mdp-event"></md-icon>' +
                             '</md-button>' +
                             '<md-input-container' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()" flex>' +
-                                '<input ng-disabled="disabled"'+mask+' ng-model="somemodel" type="{{ type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
+                                '<input ng-disabled="disabled"'+mask+' ng-model="strValue" type="{{ type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
                             '</md-input-container>' +
                         '</div>';
             },
@@ -47,7 +47,8 @@
                 'noFloat': '=mdpNoFloat',
                 'openOnClick': '=mdpOpenOnClick',
                 'disabled': '=?mdpDisabled',
-                'mdpMask': '='
+                'mdpMask': '=',
+                'model': '=model'
             },
             link: {
                 post: postLink
@@ -69,7 +70,6 @@
 
             scope.type = 'text';
             scope.dateFormat = scope.dateFormat || 'YYYY-MM-DD';
-            scope.model = ngModel;
 
             if (!angular.isDefined(scope.disabled)) {
                 scope.disabled = attrs.hasOwnProperty('mdpDisabled');
@@ -153,6 +153,12 @@
 
                 ngModel.$render();
             }
+            
+            if (scope.model) {
+                var value = moment(scope.model, angular.isDate(scope.model) ? null : scope.dateFormat, true);
+                scope.strValue = value.format(scope.dateFormat);
+            }
+            // updateDate(scope.model);
 
             scope.showPicker = function(ev) {
                 $mdpDatePicker(ngModel.$modelValue, {
