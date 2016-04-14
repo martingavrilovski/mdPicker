@@ -120,8 +120,9 @@
                     }
 
                     return parsed.toDate();
-                } else
-                    return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
+                } 
+                // else
+                //     return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
             });
 
             // update input element value
@@ -142,10 +143,10 @@
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
-                } /*else {
-                    updateInputElement(date);
-                    ngModel.$setViewValue(date);
-                }*/
+                } else {
+                    // updateInputElement(date);
+                    ngModel.$setViewValue('');
+                }
 
                 if (!ngModel.$pristine &&
                     messages.hasClass('md-auto-hide') &&

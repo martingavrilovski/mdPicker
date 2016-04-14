@@ -65,6 +65,7 @@
             scope.type = 'text';
             scope.timeFormat = scope.timeFormat || 'HH:mm';
             scope.autoSwitch = scope.autoSwitch || false;
+            scope.resetFormat = scope.timeFormat.replace(/\w/g, '0');
 
             if (!angular.isDefined(scope.disabled)) {
                 scope.disabled = attrs.hasOwnProperty('mdpDisabled');
@@ -124,10 +125,10 @@
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
-                } /*else {
-                    updateInputElement(time);
-                    ngModel.$setViewValue(time);
-                }*/
+                } else {
+                    // updateInputElement(time);
+                    ngModel.$setViewValue(scope.resetFormat);
+                }
 
                 if (!ngModel.$pristine &&
                     messages.hasClass('md-auto-hide') &&
