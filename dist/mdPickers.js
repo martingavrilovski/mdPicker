@@ -543,10 +543,10 @@
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
-                } else {
+                } /*else {
                     updateInputElement(date);
                     ngModel.$setViewValue(date);
-                }
+                }*/
 
                 if (!ngModel.$pristine &&
                     messages.hasClass('md-auto-hide') &&
