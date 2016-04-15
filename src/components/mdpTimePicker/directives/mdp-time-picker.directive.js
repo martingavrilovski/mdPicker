@@ -17,26 +17,26 @@
                     openOnClick = angular.isDefined(attrs.mdpOpenOnClick) ? true : false;
 
                 var mask = '';
-                if (attrs.mdpMask==='true') {
-                    mask = attrs.mdpFormat; 
-                    if(!attrs.mdpFormat){
+                if (attrs.mdpMask === 'true') {
+                    mask = attrs.mdpFormat;
+                    if (!attrs.mdpFormat) {
                         mask = '29:59';
-                    }else{
-                        mask = mask.replace('HH','29');
-                        mask = mask.replace('mm','59');
-                        mask = mask.replace('ss','59'); 
+                    } else {
+                        mask = mask.replace('HH', '29');
+                        mask = mask.replace('mm', '59');
+                        mask = mask.replace('ss', '59');
                     }
                     mask = ' mask="' + mask + '" restrict="reject"'
                 }
 
                 return '<div layout layout-align="start start">' +
-                            '<md-button ng-disabled="disabled" class="md-icon-button" ng-click="showPicker($event)">' +
-                                '<md-icon md-svg-icon="mdp-access-time"></md-icon>' +
-                            '</md-button>' +
-                            '<md-input-container flex' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()">' +
-                                '<input ng-disabled="disabled"'+ mask +' ng-model="strValue" type="{{ ::type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
-                            '</md-input-container>' +
-                        '</div>';
+                    '<md-button ng-disabled="disabled" class="md-icon-button" ng-click="showPicker($event)">' +
+                    '<md-icon md-svg-icon="mdp-access-time"></md-icon>' +
+                    '</md-button>' +
+                    '<md-input-container flex' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()">' +
+                    '<input ng-disabled="disabled"' + mask + ' ng-model="strValue" type="{{ ::type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
+                    '</md-input-container>' +
+                    '</div>';
             },
             scope: {
                 'timeFormat': '@mdpFormat',
@@ -44,8 +44,10 @@
                 'autoSwitch': '=?mdpAutoSwitch',
                 'disabled': '=?mdpDisabled',
                 'mdpMask': '=',
-                'mdpModel': '=mdpModel'
-            },
+                'mdpModel': '=mdpModel',
+                'parentMinTime': '=mdpParentMinTime',
+                'minTime': '=mdpMinTime'
+                            },
             link: linkFn
         };
 
@@ -80,9 +82,9 @@
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
                 var time = angular.isDate(value) && moment(value);
-                if (time && time.isValid()){
+                if (time && time.isValid()) {
                     updateInputElement(time.format(scope.timeFormat));
-                }else{
+                } else {
                     updateInputElement('');
                 }
             });
@@ -90,6 +92,7 @@
             ngModel.$validators.format = function(modelValue, viewValue) {
                 return !viewValue || angular.isDate(viewValue) || moment(viewValue, scope.timeFormat, true).isValid();
             };
+
 
             ngModel.$parsers.unshift(function(value) {
                 var parsed = moment(value, scope.timeFormat, true);
@@ -109,10 +112,10 @@
 
             // update input element value
             function updateInputElement(value) {
-                if (value){
+                if (value) {
                     inputElement[0].size = value.length + 1;
                     inputElement[0].value = value;
-                }else{
+                } else {
                     inputElement[0].value = '';
                 }
                 inputContainerCtrl.setHasValue(!ngModel.$isEmpty(value));
@@ -122,6 +125,14 @@
                 var value = moment(time, angular.isDate(time) ? null : scope.timeFormat, true),
                     strValue = value.format(scope.timeFormat);
 
+                /*if (angular.isDate(scope.parentMinTime)) {
+                    var AfterTime = moment(scope.parentMinTime);
+                    var minTime = moment(scope.mdpModel);
+                    if (minTime.isAfter(AfterTime) || minTime.isSame(AfterTime)) {
+                        scope.parentMinTime = "";
+                    }
+                }*/
+                
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
@@ -136,15 +147,16 @@
 
                 ngModel.$render();
             }
-            
 
-            if(scope.mdpModel){
+
+            if (scope.mdpModel) {
                 var value = moment(scope.mdpModel, angular.isDate(scope.mdpModel) ? null : scope.timeFormat, true);
                 scope.strValue = value.format(scope.timeFormat);
             }
-            
+
             scope.showPicker = function(ev) {
                 $mdpTimePicker(ngModel.$modelValue, {
+                    minTime: scope.minTime,
                     targetEvent: ev,
                     autoSwitch: scope.autoSwitch
                 }).then(function(time) {

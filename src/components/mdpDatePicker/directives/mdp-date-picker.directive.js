@@ -41,6 +41,7 @@
             scope: {
                 'minDate': '=mdpMinDate',
                 'maxDate': '=mdpMaxDate',
+                'parentMinDate': '=mdpParentMinDate', 
                 'dateFilter': '=mdpDateFilter',
                 'dateFormat': '@mdpFormat',
                 'placeholder': '@mdpPlaceholder',
@@ -61,6 +62,7 @@
             var inputElement = angular.element(element[0].querySelector('input')),
                 inputContainer = angular.element(element[0].querySelector('md-input-container')),
                 inputContainerCtrl = inputContainer.controller('mdInputContainer');
+                
 
             $transclude(function(clone) {
                 inputContainer.append(clone);
@@ -81,6 +83,7 @@
 
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
+            
                 var date = angular.isDate(value) && moment(value);
                 if (date && date.isValid()){
                     updateInputElement(date.format(scope.dateFormat));
@@ -104,8 +107,8 @@
             ngModel.$validators.filter = function(modelValue, viewValue) {
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
-
             ngModel.$parsers.unshift(function(value) {
+            
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
@@ -137,9 +140,18 @@
             }
 
             function updateDate(date) {
+                
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
                     strValue = value.format(scope.dateFormat);
-
+                
+                if(angular.isDate(scope.parentMinDate)){
+                    
+                    var AfterDate = moment(scope.parentMinDate);
+                    var minDate = moment(date);
+                    if(minDate.isAfter(AfterDate)){
+                        scope.parentMinDate = "";
+                    }
+                }
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
@@ -171,9 +183,10 @@
             };
 
             function onInputElementEvents(event) {
-                if (event.target.value !== ngModel.$viewVaue)
+                if (event.target.value !== ngModel.$viewVaue){
                     updateDate(event.target.value);
-            }
+                }
+            };
 
             inputElement.on('reset input blur', onInputElementEvents);
 

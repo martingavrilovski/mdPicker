@@ -23,13 +23,16 @@
         }
 
         function minDateValidator(value, format, minDate) {
+            //debugger;
             if (minDate) {
                 minDate = moment(minDate);
                 var date = angular.isDate(value) ? moment(value) : moment(value, format);
-
-                var notVal = !value, isDate = angular.isDate(value), minDateValid = !minDate.isValid(), isAfter = date.isAfter(minDate);
+                
+                var notVal = !value, isDate = angular.isDate(value), minDateValid = !minDate.isValid(), isAfter = date.isAfter(minDate) || date.isSame(minDate);
+                
                 return notVal || isDate || minDateValid || isAfter;
             }
+        
             return true;
         }
 
