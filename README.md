@@ -45,3 +45,4 @@ Then run the default gulp task:
 # builds all files in the `dist` directory
 gulp
 ```
+
