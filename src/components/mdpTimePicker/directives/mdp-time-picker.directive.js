@@ -73,11 +73,11 @@
                 scope.disabled = attrs.hasOwnProperty('mdpDisabled');
             }
 
-            scope.$watch(function() {
+           /* scope.$watch(function() {
                 return ngModel.$error;
             }, function(newValue, oldValue) {
                 inputContainerCtrl.setInvalid(!ngModel.$pristine && !!Object.keys(ngModel.$error).length);
-            }, true);
+            }, true);*/
 
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
@@ -124,14 +124,6 @@
             function updateTime(time) {
                 var value = moment(time, angular.isDate(time) ? null : scope.timeFormat, true),
                     strValue = value.format(scope.timeFormat);
-
-                /*if (angular.isDate(scope.parentMinTime)) {
-                    var AfterTime = moment(scope.parentMinTime);
-                    var minTime = moment(scope.mdpModel);
-                    if (minTime.isAfter(AfterTime) || minTime.isSame(AfterTime)) {
-                        scope.parentMinTime = "";
-                    }
-                }*/
                 
                 if (value.isValid()) {
                     updateInputElement(strValue);
@@ -148,6 +140,21 @@
                 ngModel.$render();
             }
 
+
+
+            //SCOPE TIME WATCH
+            scope.$watch('mdpModel', function(newVal, oldVal, scope){
+               
+                if(newVal != oldVal){
+                    //debugger;
+                    var minTime = moment(scope.minTime);
+                    var afterTime = moment(scope.mdpModel);
+                    if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                    {
+                        updateTime(oldVal);
+                    }
+                }
+            },true);
 
             if (scope.mdpModel) {
                 var value = moment(scope.mdpModel, angular.isDate(scope.mdpModel) ? null : scope.timeFormat, true);

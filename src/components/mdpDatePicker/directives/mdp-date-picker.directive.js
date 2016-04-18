@@ -108,7 +108,7 @@
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
             ngModel.$parsers.unshift(function(value) {
-                debugger;
+
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
@@ -148,6 +148,17 @@
                 inputContainerCtrl.setHasValue(!ngModel.$isEmpty(strValue));
             }
 
+            //SCOPE DATE WATCH
+            scope.$watch('minDate', function(newVal, oldVal, scope){
+                if(newVal != oldVal){
+                    var minDate = moment(scope.minDate);
+                    var afterDate = moment(scope.mdpModel);
+                    if(minDate.isAfter(afterDate)){
+                        updateDate(newVal);
+                    }
+                }
+            }, true);
+
             function updateDate(date) {
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
                     strValue = value.format(scope.dateFormat);
@@ -157,13 +168,14 @@
                     strValue = value.format(scope.dateFormat);
                 }
                 
-                if(angular.isDate(scope.parentMinDate)){
-                    var AfterDate = moment(scope.parentMinDate);
-                    var minDate = moment(date);
-                    if(minDate.isAfter(AfterDate)){
-                        scope.parentMinDate = "";
-                    }
-                }
+                // if(angular.isDate(scope.parentMinDate)){
+                //     var AfterDate = moment(scope.parentMinDate);
+                //     var minDate = moment(date);
+                //     if(minDate.isAfter(AfterDate)){
+                //         scope.parentMinDate = "";
+                //     }
+                // }
+
                 if (value.isValid()) {
                     updateInputElement(strValue, value);
                     ngModel.$setViewValue(strValue);

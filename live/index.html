@@ -60,7 +60,7 @@
                        <!--  <mdp-date-picker mdp-mask="true" mdp-max-date="maskDate2" mdp-min-date="maskDate1" mdp-model="maskDate" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate" mdp-format="DD.MM.YYYY"></mdp-date-picker>
                         -->
 
-                        <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-parent-min-date="maskDate2" mdp-model="maskDate1" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate1" mdp-format="DD.MM.YYYY"></mdp-date-picker>
+                        <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-model="maskDate1" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate1" mdp-format="DD.MM.YYYY"></mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate1"></input>
                         <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate2" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate2" mdp-format="DD.MM.YYYY"></mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate2"></input>
@@ -101,7 +101,7 @@
                     </div> -->
                     <div>
                         <h4 class="md-subhead">Mask for time example</h4>
-                        <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-parent-min-time="maskDate2" required mdp-model="maskDate1" ng-model="maskDate1" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
+                        <mdp-time-picker mdp-mask="true" name="timeFormat" required mdp-model="maskDate1" ng-model="maskDate1" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
                         </mdp-time-picker>
 
                         <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-min-time="maskDate1" required mdp-model="maskDate2"  ng-model="maskDate2" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
@@ -152,6 +152,7 @@
             '$mdpDatePicker',
             '$mdpTimePicker',
             function($scope, $mdpDatePicker, $mdpTimePicker) {
+                
                 window.scopePicker = $scope;
                 $scope.maxDate = new Date((new Date()).setHours(23, 59, 59, 999));
                 $scope.maskDate1 = new Date((new Date()).setHours(23, 58, 59, 999));
