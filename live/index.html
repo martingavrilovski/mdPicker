@@ -153,8 +153,8 @@
             '$mdpTimePicker',
             function($scope, $mdpDatePicker, $mdpTimePicker) {
                 window.scopePicker = $scope;
-                $scope.maxDate = new Date();
-                //$scope.maskDate1 = new Date();
+                $scope.maxDate = new Date((new Date()).setHours(23, 59, 59, 999));
+                $scope.maskDate1 = new Date((new Date()).setHours(23, 58, 59, 999));
                 $scope.minDate = moment().subtract(6, 'days');
 
                 $scope.onChangeCheckbox = function(isEnabled) {

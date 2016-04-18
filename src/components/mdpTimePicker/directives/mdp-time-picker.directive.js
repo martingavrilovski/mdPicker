@@ -67,7 +67,7 @@
             scope.type = 'text';
             scope.timeFormat = scope.timeFormat || 'HH:mm';
             scope.autoSwitch = scope.autoSwitch || false;
-            scope.resetFormat = scope.timeFormat.replace(/\w/g, '0');
+            //scope.resetFormat = scope.timeFormat.replace(/\w/g, '0');
 
             if (!angular.isDefined(scope.disabled)) {
                 scope.disabled = attrs.hasOwnProperty('mdpDisabled');
@@ -138,7 +138,7 @@
                     ngModel.$setViewValue(strValue);
                 } else {
                     // updateInputElement(time);
-                    ngModel.$setViewValue(scope.resetFormat);
+                    // ngModel.$setViewValue(scope.resetFormat);
                 }
 
                 if (!ngModel.$pristine &&

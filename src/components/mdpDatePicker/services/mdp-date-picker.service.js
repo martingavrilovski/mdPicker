@@ -28,7 +28,7 @@
                 minDate = moment(minDate);
                 var date = angular.isDate(value) ? moment(value) : moment(value, format);
                 
-                var notVal = !value, isDate = angular.isDate(value), minDateValid = !minDate.isValid(), isAfter = date.isAfter(minDate) || date.isSame(minDate);
+                var notVal = !value, isDate = angular.isDate(value), minDateValid = !minDate.isValid(), isAfter = (date.isAfter(minDate) || date.isSame(minDate.startOf('day')));
                 
                 return notVal || isDate || minDateValid || isAfter;
             }
@@ -41,7 +41,7 @@
                 maxDate = moment(maxDate);
                 var date = angular.isDate(value) ? moment(value) : moment(value, format);
 
-                var notVal = !value, isDate = angular.isDate(value), maxDateValid = !maxDate.isValid(), isBefore = date.isBefore(maxDate);
+                var notVal = !value, isDate = angular.isDate(value), maxDateValid = !maxDate.isValid(), isBefore = date.isBefore(maxDate) || date.isSame(maxDate);
                 return notVal || isDate || maxDateValid || isBefore;
             }
             return true;

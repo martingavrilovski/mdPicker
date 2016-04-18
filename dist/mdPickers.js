@@ -487,7 +487,7 @@
             
                 var date = angular.isDate(value) && moment(value);
                 if (date && date.isValid()){
-                    updateInputElement(date.format(scope.dateFormat));
+                    updateInputElement(date.format(scope.dateFormat), value);
                 }else{
                     updateInputElement();
                 }
@@ -509,7 +509,7 @@
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
             ngModel.$parsers.unshift(function(value) {
-            
+                debugger;
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
@@ -523,6 +523,14 @@
                         parsed = originalModel;
                     }
 
+                    if (scope.minDate && (parsed.isBefore(scope.minDate) || parsed.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
+                        parsed = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
+                    }
+
+                   /* if (scope.maxDate && (parsed.isAfter(scope.maxDate) || parsed.startOf('day').isSame(moment(scope.maxDate).startOf('day')))) {
+                        parsed = moment(scope.maxDate, angular.isDate(scope.maxDate) ? null : scope.dateFormat, true).subtract(60,'seconds');
+                    }*/
+
                     return parsed.toDate();
                 } 
                 // else
@@ -530,23 +538,27 @@
             });
 
             // update input element value
-            function updateInputElement(value) {
-                if (value){
-                    inputElement[0].size = value.length + 1;
-                    inputElement[0].value = value;
+            function updateInputElement(strValue, value) {
+                if (strValue){
+                    inputElement[0].size = strValue.length + 1;
+                    inputElement[0].value = strValue;
+
                 }else{
                     inputElement[0].value = '';
                 }
-                inputContainerCtrl.setHasValue(!ngModel.$isEmpty(value));
+                inputContainerCtrl.setHasValue(!ngModel.$isEmpty(strValue));
             }
 
             function updateDate(date) {
-                
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
                     strValue = value.format(scope.dateFormat);
+
+                if (scope.minDate && (value.isBefore(scope.minDate) || value.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
+                    value = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
+                    strValue = value.format(scope.dateFormat);
+                }
                 
                 if(angular.isDate(scope.parentMinDate)){
-                    
                     var AfterDate = moment(scope.parentMinDate);
                     var minDate = moment(date);
                     if(minDate.isAfter(AfterDate)){
@@ -554,7 +566,7 @@
                     }
                 }
                 if (value.isValid()) {
-                    updateInputElement(strValue);
+                    updateInputElement(strValue, value);
                     ngModel.$setViewValue(strValue);
                 } else {
                     // updateInputElement(date);
@@ -686,7 +698,7 @@
                 minDate = moment(minDate);
                 var date = angular.isDate(value) ? moment(value) : moment(value, format);
                 
-                var notVal = !value, isDate = angular.isDate(value), minDateValid = !minDate.isValid(), isAfter = date.isAfter(minDate) || date.isSame(minDate);
+                var notVal = !value, isDate = angular.isDate(value), minDateValid = !minDate.isValid(), isAfter = (date.isAfter(minDate) || date.isSame(minDate.startOf('day')));
                 
                 return notVal || isDate || minDateValid || isAfter;
             }
@@ -699,7 +711,7 @@
                 maxDate = moment(maxDate);
                 var date = angular.isDate(value) ? moment(value) : moment(value, format);
 
-                var notVal = !value, isDate = angular.isDate(value), maxDateValid = !maxDate.isValid(), isBefore = date.isBefore(maxDate);
+                var notVal = !value, isDate = angular.isDate(value), maxDateValid = !maxDate.isValid(), isBefore = date.isBefore(maxDate) || date.isSame(maxDate);
                 return notVal || isDate || maxDateValid || isBefore;
             }
             return true;
@@ -1054,7 +1066,7 @@
             scope.type = 'text';
             scope.timeFormat = scope.timeFormat || 'HH:mm';
             scope.autoSwitch = scope.autoSwitch || false;
-            scope.resetFormat = scope.timeFormat.replace(/\w/g, '0');
+            //scope.resetFormat = scope.timeFormat.replace(/\w/g, '0');
 
             if (!angular.isDefined(scope.disabled)) {
                 scope.disabled = attrs.hasOwnProperty('mdpDisabled');
@@ -1125,7 +1137,7 @@
                     ngModel.$setViewValue(strValue);
                 } else {
                     // updateInputElement(time);
-                    ngModel.$setViewValue(scope.resetFormat);
+                    // ngModel.$setViewValue(scope.resetFormat);
                 }
 
                 if (!ngModel.$pristine &&
