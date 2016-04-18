@@ -125,13 +125,22 @@
                 var value = moment(time, angular.isDate(time) ? null : scope.timeFormat, true),
                     strValue = value.format(scope.timeFormat);
 
-                /*if (angular.isDate(scope.parentMinTime)) {
-                    var AfterTime = moment(scope.parentMinTime);
+               
+                if (angular.isDate(scope.minTime)) {
+                    var AfterTime = moment(scope.mdpModel);
+                    var minTime = moment(scope.minTime);
+                    if (minTime.isAfter(AfterTime) || minTime.isSame(AfterTime)) {
+                        scope.mdpModel = "";
+                    }
+                }
+
+                if(angular.isDate(scope.parentMinTime)){
+                     var AfterTime = moment(scope.parentMinTime);
                     var minTime = moment(scope.mdpModel);
                     if (minTime.isAfter(AfterTime) || minTime.isSame(AfterTime)) {
                         scope.parentMinTime = "";
                     }
-                }*/
+                }
                 
                 if (value.isValid()) {
                     updateInputElement(strValue);

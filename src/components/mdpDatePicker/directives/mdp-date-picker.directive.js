@@ -108,7 +108,6 @@
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
             ngModel.$parsers.unshift(function(value) {
-                debugger;
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
