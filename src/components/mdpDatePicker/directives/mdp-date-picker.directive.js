@@ -156,6 +156,7 @@
 
             //SCOPE DATE WATCH
             scope.$watch('minDate', function(newVal, oldVal, scope){
+                
                 if(newVal && oldVal){  
                     newVal = moment(newVal);
                     oldVal = moment(oldVal); 
@@ -163,6 +164,8 @@
                         var minDate = moment(scope.minDate);
                         var afterDate = moment(scope.mdpModel);
                         if(minDate.isAfter(afterDate)){
+
+                            newVal = moment(newVal).add(60,'seconds');
                             updateDate(newVal);
                         }
                     }
