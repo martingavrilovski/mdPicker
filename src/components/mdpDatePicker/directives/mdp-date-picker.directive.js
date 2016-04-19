@@ -135,8 +135,9 @@
 
                     return parsed.toDate();
                 } 
-                else
-                    return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
+                else if(angular.isDate(ngModel.$modelValue)){
+                    return ngModel.$modelValue;
+                }
 
             });
 
@@ -155,6 +156,7 @@
 
             //SCOPE DATE WATCH
             scope.$watch('minDate', function(newVal, oldVal, scope){
+                debugger;
                 if(newVal && oldVal){  
                     newVal = moment(newVal);
                     oldVal = moment(oldVal); 
