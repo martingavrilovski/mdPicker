@@ -62,8 +62,12 @@
 
                         <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-model="maskDate1" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate1" mdp-format="DD.MM.YYYY"></mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate1"></input>
+
                         <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate2" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate2" mdp-format="DD.MM.YYYY"></mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate2"></input>
+
+                         <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate3" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate3" mdp-format="DD.MM.YYYY"></mdp-date-picker>
+                        <input type="text" name="date" ng-model="maskDate3"></input>
                     </div>
                     <!-- <div>
                         <h4 class="md-subhead">Min/max date</h4>
@@ -105,6 +109,9 @@
                         </mdp-time-picker>
 
                         <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-min-time="maskDate1" required mdp-model="maskDate2"  ng-model="maskDate2" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
+                        </mdp-time-picker>
+
+                        <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-min-time="maskDate1" required mdp-model="maskDate3"  ng-model="maskDate3" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
                         </mdp-time-picker>
                     </div>
                    <!--  <div>

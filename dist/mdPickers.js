@@ -484,7 +484,7 @@
 
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
-            
+                
                 var date = angular.isDate(value) && moment(value);
                 if (date && date.isValid()){
                     updateInputElement(date.format(scope.dateFormat), value);
@@ -509,7 +509,7 @@
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
             ngModel.$parsers.unshift(function(value) {
-
+                
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
@@ -536,12 +536,14 @@
 
                     return parsed.toDate();
                 } 
-                // else
-                //     return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
+                else
+                    return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
+
             });
 
             // update input element value
             function updateInputElement(strValue, value) {
+
                 if (strValue){
                     inputElement[0].size = strValue.length + 1;
                     inputElement[0].value = strValue;
@@ -554,23 +556,14 @@
 
             //SCOPE DATE WATCH
             scope.$watch('minDate', function(newVal, oldVal, scope){
-                if(newVal != oldVal){
-                    var minDate = moment(scope.minDate);
-                    var afterDate = moment(scope.mdpModel);
-                    if(minDate.isAfter(afterDate)){
-                        updateDate(newVal);
-                    }
-                }
-            });
-
-            scope.$watch('mdpModel', function(newVal, oldVal, scope){
-                if(newVal != oldVal){
-                    if(scope.minDate){
+                if(newVal && oldVal){  
+                    newVal = moment(newVal);
+                    oldVal = moment(oldVal); 
+                   if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
                         var minDate = moment(scope.minDate);
                         var afterDate = moment(scope.mdpModel);
-                        if(minDate.isAfter(afterDate) && minDate.startOf('days').isSame(afterDate.startOf('days')))
-                        {
-                            updateDate(oldVal);
+                        if(minDate.isAfter(afterDate)){
+                            updateDate(newVal);
                         }
                     }
                 }
@@ -580,18 +573,10 @@
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
                     strValue = value.format(scope.dateFormat);
 
-                if (scope.minDate && (value.isBefore(scope.minDate) || value.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
+                if (scope.minDate && (value.isBefore(scope.minDate) && value.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
                     value = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
                     strValue = value.format(scope.dateFormat);
                 }
-                
-                // if(angular.isDate(scope.parentMinDate)){
-                //     var AfterDate = moment(scope.parentMinDate);
-                //     var minDate = moment(date);
-                //     if(minDate.isAfter(AfterDate)){
-                //         scope.parentMinDate = "";
-                //     }
-                // }
 
                 if (value.isValid()) {
                     updateInputElement(strValue, value);
@@ -1168,26 +1153,38 @@
             }
 
             scope.$watch('mdpModel', function(newVal, oldVal, scope){
-                if(newVal != oldVal){
-                    if(scope.minTime){
-                        var minTime = moment(scope.minTime);
-                        var afterTime = moment(scope.mdpModel);
-                        if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
-                        {
-                            updateTime(oldVal);
+
+               if(newVal && oldVal){
+                    newVal = moment(newVal);
+                    oldVal = moment(oldVal);
+                    if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
+                        
+                        if(scope.minTime){
+                            var minTime = moment(scope.minTime);
+                            var afterTime = moment(scope.mdpModel);
+                            if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                            {
+                                updateTime(oldVal);
+                            }
                         }
                     }
                 }
             });
 
            scope.$watch('minTime', function(newVal, oldVal, scope){
-                if(newVal != oldVal){
-                    var minTime = moment(scope.minTime);
-                    var afterTime = moment(scope.mdpModel);
-                    if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
-                    {
-                        newVal = moment(newVal).add(60,'seconds');
-                        updateTime(newVal);
+
+                if(newVal && oldVal){
+                    newVal = moment(newVal);
+                    oldVal = moment(oldVal);
+                    if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
+                        
+                        var minTime = moment(scope.minTime);
+                        var afterTime = moment(scope.mdpModel);
+                        if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                        {
+                            newVal = moment(newVal).add(60,'seconds');
+                            updateTime(newVal);
+                        }
                     }
                 }
             });

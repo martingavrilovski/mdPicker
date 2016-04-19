@@ -141,26 +141,38 @@
             }
 
             scope.$watch('mdpModel', function(newVal, oldVal, scope){
-                if(newVal != oldVal){
-                    if(scope.minTime){
-                        var minTime = moment(scope.minTime);
-                        var afterTime = moment(scope.mdpModel);
-                        if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
-                        {
-                            updateTime(oldVal);
+
+               if(newVal && oldVal){
+                    newVal = moment(newVal);
+                    oldVal = moment(oldVal);
+                    if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
+                        
+                        if(scope.minTime){
+                            var minTime = moment(scope.minTime);
+                            var afterTime = moment(scope.mdpModel);
+                            if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                            {
+                                updateTime(oldVal);
+                            }
                         }
                     }
                 }
             });
 
            scope.$watch('minTime', function(newVal, oldVal, scope){
-                if(newVal != oldVal){
-                    var minTime = moment(scope.minTime);
-                    var afterTime = moment(scope.mdpModel);
-                    if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
-                    {
-                        newVal = moment(newVal).add(60,'seconds');
-                        updateTime(newVal);
+
+                if(newVal && oldVal){
+                    newVal = moment(newVal);
+                    oldVal = moment(oldVal);
+                    if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
+                        
+                        var minTime = moment(scope.minTime);
+                        var afterTime = moment(scope.mdpModel);
+                        if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                        {
+                            newVal = moment(newVal).add(60,'seconds');
+                            updateTime(newVal);
+                        }
                     }
                 }
             });
