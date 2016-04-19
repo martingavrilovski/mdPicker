@@ -126,6 +126,9 @@
                         parsed = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
                     }
 
+                    parsed.set('hour', moment(scope.mdpModel).hour());
+                    parsed.set('minute', moment(scope.mdpModel).minute());
+
                    /* if (scope.maxDate && (parsed.isAfter(scope.maxDate) || parsed.startOf('day').isSame(moment(scope.maxDate).startOf('day')))) {
                         parsed = moment(scope.maxDate, angular.isDate(scope.maxDate) ? null : scope.dateFormat, true).subtract(60,'seconds');
                     }*/
@@ -150,7 +153,6 @@
 
             //SCOPE DATE WATCH
             scope.$watch('minDate', function(newVal, oldVal, scope){
-                
                 if(newVal != oldVal){
                     var minDate = moment(scope.minDate);
                     var afterDate = moment(scope.mdpModel);
@@ -162,7 +164,6 @@
 
             scope.$watch('mdpModel', function(newVal, oldVal, scope){
                 if(newVal != oldVal){
-                    
                     if(scope.minDate){
                         var minDate = moment(scope.minDate);
                         var afterDate = moment(scope.mdpModel);
