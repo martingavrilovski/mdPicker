@@ -150,6 +150,7 @@
 
             //SCOPE DATE WATCH
             scope.$watch('minDate', function(newVal, oldVal, scope){
+                
                 if(newVal != oldVal){
                     var minDate = moment(scope.minDate);
                     var afterDate = moment(scope.mdpModel);
@@ -157,7 +158,21 @@
                         updateDate(newVal);
                     }
                 }
-            }, true);
+            });
+
+            scope.$watch('mdpModel', function(newVal, oldVal, scope){
+                if(newVal != oldVal){
+                    
+                    if(scope.minDate){
+                        var minDate = moment(scope.minDate);
+                        var afterDate = moment(scope.mdpModel);
+                        if(minDate.isAfter(afterDate) && minDate.startOf('days').isSame(afterDate.startOf('days')))
+                        {
+                            updateDate(oldVal);
+                        }
+                    }
+                }
+            });
 
             function updateDate(date) {
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
