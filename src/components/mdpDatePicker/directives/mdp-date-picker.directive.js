@@ -156,7 +156,6 @@
 
             //SCOPE DATE WATCH
             scope.$watch('minDate', function(newVal, oldVal, scope){
-                debugger;
                 if(newVal && oldVal){  
                     newVal = moment(newVal);
                     oldVal = moment(oldVal); 
