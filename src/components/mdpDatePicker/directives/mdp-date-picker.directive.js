@@ -108,7 +108,6 @@
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
             ngModel.$parsers.unshift(function(value) {
-                
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
@@ -121,18 +120,6 @@
 
                         parsed = originalModel;
                     }
-
-                    if (scope.minDate && (parsed.isBefore(scope.minDate) || parsed.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
-                        parsed = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
-                    }
-
-                    parsed.set('hour', moment(scope.mdpModel).hour());
-                    parsed.set('minute', moment(scope.mdpModel).minute());
-
-                   /* if (scope.maxDate && (parsed.isAfter(scope.maxDate) || parsed.startOf('day').isSame(moment(scope.maxDate).startOf('day')))) {
-                        parsed = moment(scope.maxDate, angular.isDate(scope.maxDate) ? null : scope.dateFormat, true).subtract(60,'seconds');
-                    }*/
-
                     return parsed.toDate();
                 } 
                 else if(angular.isDate(ngModel.$modelValue)){
@@ -147,7 +134,7 @@
                 if (strValue){
                     inputElement[0].size = strValue.length + 1;
                     inputElement[0].value = strValue;
-
+                    inputContainerCtrl.setInvalid(false);
                 }else{
                     inputElement[0].value = '';
                 }
@@ -155,8 +142,8 @@
             }
 
             //SCOPE DATE WATCH
-            scope.$watch('minDate', function(newVal, oldVal, scope){
-                
+           scope.$watch('minDate', function(newVal, oldVal, scope){
+                debugger;
                 if(newVal && oldVal){  
                     newVal = moment(newVal);
                     oldVal = moment(oldVal); 
@@ -164,13 +151,68 @@
                         var minDate = moment(scope.minDate);
                         var afterDate = moment(scope.mdpModel);
                         if(minDate.isAfter(afterDate)){
-
-                            newVal = moment(newVal).add(60,'seconds');
-                            updateDate(newVal);
+                            inputContainerCtrl.setInvalid(true);
+                        }
+                        else{
+                            inputContainerCtrl.setInvalid(false);
                         }
                     }
                 }
+
+                if(newVal && !oldVal){
+                    var minDate = moment(scope.minDate);
+                    var afterDate = moment(scope.mdpModel);
+                    if(minDate.isAfter(afterDate)){
+                        inputContainerCtrl.setInvalid(true);
+                    }
+                }
+
+                if(!newVal){
+                    inputContainerCtrl.setInvalid(true);
+                }
             });
+
+           /*scope.$watch('mdpModel', function(newVal, oldVal, scope){
+                if(newVal && oldVal){
+                    newVal = moment(newVal);
+                    oldVal = moment(oldVal);
+                    if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
+                        
+                        if(scope.minDate){
+                            var minDate = moment(scope.minDate);
+                            var afterDate = moment(scope.mdpModel);
+                            if(minDate.isAfter(afterDate) && minDate.startOf('days').isSame(afterDate.startOf('days')))
+                            {
+                               inputContainerCtrl.setInvalid(true);
+                            }
+                        }
+                        else{
+                            inputContainerCtrl.setInvalid(false);
+                        }
+                    }
+                    else{
+                        inputContainerCtrl.setInvalid(false);
+                    }
+                }
+
+                if(newVal && !oldVal){
+                    if(scope.minDate){
+                            var minDate = moment(scope.minDate);
+                            var afterDate = moment(scope.mdpModel);
+                            if(minDate.isAfter(afterDate) && minDate.startOf('days').isSame(afterDate.startOf('days')))
+                            {
+                               inputContainerCtrl.setInvalid(true);
+                            }
+                        }
+                        else{
+                            inputContainerCtrl.setInvalid(false);
+                        }
+                }
+
+                if(!newVal){
+                    inputContainerCtrl.setInvalid(true);
+                }
+           });*/
 
             function updateDate(date) {
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
@@ -186,7 +228,7 @@
                     ngModel.$setViewValue(strValue);
                 } else {
                     // updateInputElement(date);
-                    ngModel.$setViewValue('');
+                    //ngModel.$setViewValue('');
                 }
 
                 if (!ngModel.$pristine &&
@@ -196,7 +238,7 @@
                 ngModel.$render();
             }
             
-            if (scope.mdpModel) {
+          if (scope.mdpModel) {
                 var value = moment(scope.mdpModel, angular.isDate(scope.mdpModel) ? null : scope.dateFormat, true);
                 scope.strValue = value.format(scope.dateFormat);
             }

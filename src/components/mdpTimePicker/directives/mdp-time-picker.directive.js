@@ -73,11 +73,11 @@
                 scope.disabled = attrs.hasOwnProperty('mdpDisabled');
             }
 
-        /*    scope.$watch(function() {
+        scope.$watch(function() {
                 return ngModel.$error;
             }, function(newValue, oldValue) {
                 inputContainerCtrl.setInvalid(!ngModel.$pristine && !!Object.keys(ngModel.$error).length);
-            }, true);*/
+            }, true);
 
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
@@ -107,7 +107,10 @@
                     }
                     return parsed.toDate();
                 } else
-                    return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
+                    if(angular.isDate(ngModel.$modelValue)){
+                        return ngModel.$modelValue;
+                    }
+
             });
 
             // update input element value
@@ -141,6 +144,7 @@
             }
 
             scope.$watch('mdpModel', function(newVal, oldVal, scope){
+               debugger;
                if(newVal && oldVal){
                     newVal = moment(newVal);
                     oldVal = moment(oldVal);
@@ -149,18 +153,57 @@
                         if(scope.minTime){
                             var minTime = moment(scope.minTime);
                             var afterTime = moment(scope.mdpModel);
-                            if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                            if((minTime.isAfter(afterTime) || minTime.isAfter(afterTime))&& minTime.startOf('days').isSame(afterTime.startOf('days')))
                             {
-                                minTime = moment(scope.minTime).add(60,'seconds');
-                                updateTime(minTime);
+                                inputContainerCtrl.setInvalid(true);
+                            }
+                            else{
+                                inputContainerCtrl.setInvalid(false);
                             }
                         }
+                        else{
+                            inputContainerCtrl.setInvalid(false);
+                        }
                     }
+                    else{
+                        if(scope.minTime){
+                            var minTime = moment(scope.minTime);
+                            var afterTime = moment(scope.mdpModel);
+                            if((minTime.isAfter(afterTime) || minTime.isAfter(afterTime)) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                            {
+                                inputContainerCtrl.setInvalid(true);
+                            }
+                            else{
+                                inputContainerCtrl.setInvalid(false);
+                            }
+                        }
+                        else{
+                            inputContainerCtrl.setInvalid(false);
+                        }
+                    }
+                }
+
+                if(newVal && !oldVal){
+                    if(scope.minTime){
+                            var minTime = moment(scope.minTime);
+                            var afterTime = moment(scope.mdpModel);
+                            if((minTime.isAfter(afterTime) || minTime.isSame(afterTime)) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                            {
+                               inputContainerCtrl.setInvalid(true);
+                            }
+                        }
+                        else{
+                            inputContainerCtrl.setInvalid(false);
+                        }
+                }
+
+                if(!newVal){
+                    inputContainerCtrl.setInvalid(true);
                 }
             });
 
            scope.$watch('minTime', function(newVal, oldVal, scope){
-                
+                debugger;
                 if(newVal && oldVal){
                     newVal = moment(newVal);
                     oldVal = moment(oldVal);
@@ -168,24 +211,22 @@
                         
                         var minTime = moment(scope.minTime);
                         var afterTime = moment(scope.mdpModel);
-                        if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                        if((minTime.isAfter(afterTime) || minTime.isSame(afterTime)) && minTime.startOf('days').isSame(afterTime.startOf('days')))
                         {
-                            newVal = moment(newVal).add(60,'seconds');
-                            updateTime(newVal);
+                            inputContainerCtrl.setInvalid(true);
+                        }
+                        else{
+                            inputContainerCtrl.setInvalid(false);
                         }
                     }
                 }
                 if(newVal && !oldVal){
-                    newVal = moment(newVal);
-                    oldVal = moment(oldVal);
-                    if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
-                        
+                    if(scope.minTime){
                         var minTime = moment(scope.minTime);
                         var afterTime = moment(scope.mdpModel);
-                        if(minTime.isAfter(afterTime) && minTime.startOf('days').isSame(afterTime.startOf('days')))
+                        if((minTime.isAfter(afterTime) || minTime.isSame(afterTime)) && minTime.startOf('days').isSame(afterTime.startOf('days')))
                         {
-                            newVal = moment(newVal).add(60,'seconds');
-                            updateTime(newVal);
+                            inputContainerCtrl.setInvalid(true);
                         }
                     }
                 }
