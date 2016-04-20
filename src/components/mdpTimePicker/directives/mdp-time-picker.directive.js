@@ -73,11 +73,11 @@
                 scope.disabled = attrs.hasOwnProperty('mdpDisabled');
             }
 
-        scope.$watch(function() {
+        /*scope.$watch(function() {
                 return ngModel.$error;
             }, function(newValue, oldValue) {
                 inputContainerCtrl.setInvalid(!ngModel.$pristine && !!Object.keys(ngModel.$error).length);
-            }, true);
+            }, true);*/
 
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
@@ -144,7 +144,7 @@
             }
 
             scope.$watch('mdpModel', function(newVal, oldVal, scope){
-               debugger;
+               
                if(newVal && oldVal){
                     newVal = moment(newVal);
                     oldVal = moment(oldVal);
@@ -203,7 +203,7 @@
             });
 
            scope.$watch('minTime', function(newVal, oldVal, scope){
-                debugger;
+                
                 if(newVal && oldVal){
                     newVal = moment(newVal);
                     oldVal = moment(oldVal);
