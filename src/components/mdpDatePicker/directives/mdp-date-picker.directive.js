@@ -82,7 +82,6 @@
 
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
-                
                 var date = angular.isDate(value) && moment(value);
                 if (date && date.isValid()){
                     updateInputElement(date.format(scope.dateFormat), value);
@@ -92,21 +91,26 @@
             });
 
             ngModel.$validators.format = function(modelValue, viewValue) {
+                //ngModel.$setValidity("invalidFormat",mdpDatePickerService.formatValidator(viewValue, scope.dateFormat));
                 return mdpDatePickerService.formatValidator(viewValue, scope.dateFormat);
             };
 
             ngModel.$validators.minDate = function(modelValue, viewValue) {
+                ngModel.$setValidity("minDate", mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate));
                 return mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate);
             };
 
             ngModel.$validators.maxDate = function(modelValue, viewValue) {
+                ngModel.$setValidity("maxDate", mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate));
                 return mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate);
             };
 
             ngModel.$validators.filter = function(modelValue, viewValue) {
+                //ngModel.$setValidity("invalidFormat",mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter));
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
             ngModel.$parsers.unshift(function(value) {
+
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
@@ -129,7 +133,6 @@
 
             // update input element value
             function updateInputElement(strValue, value) {
-
                 if (strValue){
                     inputElement[0].size = strValue.length + 1;
                     inputElement[0].value = strValue;
@@ -144,19 +147,17 @@
 
             //SCOPE DATE WATCH
            scope.$watch('minDate', function(newVal, oldVal, scope){
-            debugger;
                 if(newVal && oldVal){  
                     newVal = moment(newVal);
                     oldVal = moment(oldVal); 
                    if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
                         var minDate = moment(scope.minDate);
                         var afterDate = moment(scope.mdpModel);
-                        if(minDate.isAfter(afterDate)){
-                             ngModel.$setValidity("minmax", false);
-                             ngModel.$setValidity("required", true);
+                        if(minDate.isAfter(afterDate)){  
+                            ngModel.$setValidity("minDate", false);
                         }
                         else{
-                            ngModel.$setValidity("minmax", true);
+                            ngModel.$setValidity("minDate", true);
                         }
                     }
                 }
@@ -165,13 +166,19 @@
                     var minDate = moment(scope.minDate);
                     var afterDate = moment(scope.mdpModel);
                     if(minDate.isAfter(afterDate)){
-                        
+                        ngModel.$setValidity("minDate", false);
+                    }
+                    else{
+                        ngModel.$setValidity("minDate", true);
                     }
                 }
 
-                if(!newVal){
+                if(!newVal && !oldVal){
                     
                     ngModel.$setValidity("required", false);
+                }
+                if(!newVal && oldVal){
+                    ngModel.$setValidity("minDate", true);
                 }
             });
 
@@ -211,9 +218,32 @@
             };
 
             function onInputElementEvents(event) {
-                var date = event.target.get.value;
-                if (event.target.value !== ngModel.$viewVaue){
-                    updateDate(date);
+
+                var date = event.target.value;
+                var parts = date.split(".");
+                var day = parseInt(parts[0]);
+                var month = parseInt(parts[1]);
+                if(day < 32 && month < 13){
+                    if(month == 0 || day == 0){
+                        ngModel.$setValidity("invalidFormat", false);
+                        ngModel.$setValidity("required", true);
+                    }
+                    else{
+                        ngModel.$setValidity("invalidFormat", true);
+                        if (date !== ngModel.$viewVaue){
+                            updateDate(date);
+                        }
+                    }
+                }
+                else if(parts == ""){
+                    ngModel.$setValidity("invalidFormat", true);
+                    ngModel.$setValidity("required", false);
+                    ngModel.$setViewValue(undefined);
+                }
+                else{
+                    ngModel.$setValidity("invalidFormat", false);
+                    ngModel.$setValidity("required", true);
+                    ngModel.$setViewValue(undefined)
                 }
             };
 

@@ -144,7 +144,7 @@
             }
 
             scope.$watch('mdpModel', function(newVal, oldVal, scope){
-                debugger;
+            
                if(newVal && oldVal){
                     newVal = moment(newVal);
                     oldVal = moment(oldVal);
@@ -218,7 +218,7 @@
             });
 
            scope.$watch('minTime', function(newVal, oldVal, scope){
-                debugger;
+                
                 if(newVal && oldVal){
                     newVal = moment(newVal);
                     oldVal = moment(oldVal);

@@ -116,20 +116,27 @@
                        <!--  <mdp-date-picker mdp-mask="true" mdp-max-date="maskDate2" mdp-min-date="maskDate1" mdp-model="maskDate" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate" mdp-format="DD.MM.YYYY"></mdp-date-picker>
                         -->
                             
-                        <mdp-date-picker mdp-mask="true" name="dateFormat1" mdp-max-date="maxDate" md-max-date="maxDate" mdp-model="maskDate1" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate1" mdp-format="DD.MM.YYYY">
-                            <div ng-show="demoForm.dateFormat1.$error.required" style="font-size: 11px; color: red">Date is required</div>
+                        <mdp-date-picker mdp-mask="true" name="dateFormat1" mdp-max-date="maxDate" mdp-model="maskDate1" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate1" mdp-format="DD.MM.YYYY">
+                            <span ng-show="demoForm.dateFormat1.$error.required" style="font-size: 11px; color: red">Date is required</span>
+                            <span ng-show="demoForm.dateFormat1.$error.invalidFormat" style="font-size: 11px; color: red">Invalid date format</span>
+                            <span ng-show="demoForm.dateFormat1.$error.maxDate" style="font-size: 11px; color: red">Max date exceeded</span>
+                           
                         </mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate1"></input>
 
-                        <mdp-date-picker mdp-mask="true" name="dateFormat2" mdp-max-date="maxDate" mdp-min-date="maskDate1" md-max-date="maxDate" md-min-date="maskDate1" mdp-model="maskDate2" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate2" mdp-format="DD.MM.YYYY">
-                            <div ng-show="demoForm.dateFormat2.$error.required" style="font-size: 11px; color: red">Date is required</div>
-                            <span ng-show="demoForm.dateFormat2.$error.minmax" style="font-size: 11px; color: red">Invalid date</span>
+                        <mdp-date-picker mdp-mask="true" name="dateFormat2" mdp-max-date="maxDate" mdp-min-date="maskDate1" mdp-model="maskDate2" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate2" mdp-format="DD.MM.YYYY">
+                            <span ng-show="demoForm.dateFormat2.$error.required" style="font-size: 11px; color: red">Date is required</span>
+                            <span ng-show="demoForm.dateFormat2.$error.invalidFormat" style="font-size: 11px; color: red">Invalid date format</span>
+                            <span ng-show="demoForm.dateFormat2.$error.maxDate" style="font-size: 11px; color: red">Max date exceeded</span>
+                            <span ng-show="demoForm.dateFormat2.$error.minDate" style="font-size: 11px; color: red">Min date exceeded</span>
                         </mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate2"></input>
 
-                         <mdp-date-picker mdp-mask="true" name="dateFormat3" md-max-date="maxDate" md-min-date="maskDate1" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate3" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate3" mdp-format="DD.MM.YYYY"> 
-                           <div ng-show="demoForm.dateFormat3.$error.required" style="font-size: 11px; color: red">Date is required</div>
-                           <span ng-show="demoForm.dateFormat3.$error.minmax" style="font-size: 11px; color: red">Invalid date</span>
+                         <mdp-date-picker mdp-mask="true" name="dateFormat3" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate3" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate3" mdp-format="DD.MM.YYYY"> 
+                           <span ng-show="demoForm.dateFormat3.$error.required" style="font-size: 11px; color: red">Date is required</span>
+                           <span ng-show="demoForm.dateFormat3.$error.invalidFormat" style="font-size: 11px; color: red">Invalid date format</span>
+                           <span ng-show="demoForm.dateFormat3.$error.maxDate" style="font-size: 11px; color: red">Max date exceeded</span>
+                           <span ng-show="demoForm.dateFormat3.$error.minDate" style="font-size: 11px; color: red">Min date exceeded</span>
                         </mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate3"></input>
                     </div>
