@@ -144,7 +144,6 @@
             }
 
             scope.$watch('mdpModel', function(newVal, oldVal, scope){
-            
                if(newVal && oldVal){
                     newVal = moment(newVal);
                     oldVal = moment(oldVal);
@@ -218,7 +217,6 @@
             });
 
            scope.$watch('minTime', function(newVal, oldVal, scope){
-                
                 if(newVal && oldVal){
                     newVal = moment(newVal);
                     oldVal = moment(oldVal);
@@ -250,6 +248,11 @@
                         }
                     }
                 }
+                if(!newVal && oldVal){
+                    if(scope.mdpModel){
+                        ngModel.$setValidity('minmax', true);
+                    }
+                }
             });
 
             if (scope.mdpModel) {
@@ -273,7 +276,7 @@
                 var hours = parseInt(parts[0]); 
                 var minutes = parseInt(parts[1]);
                 if(hours < 25){
-                    if(hours == 24 && minutes > 1){
+                    if(hours == 24 && minutes > 0){
                         ngModel.$setValidity("invalidFormat", false);
                         ngModel.$setValidity("required", true);
                     }
@@ -283,9 +286,13 @@
                             updateTime(time);
                     }
                }
-               else{
+               else if(parts == ""){
                     ngModel.$setValidity("invalidFormat", true);
                     ngModel.$setValidity("required", false);
+               }
+               else{
+                    ngModel.$setValidity("invalidFormat", false);
+                    ngModel.$setValidity("required", true);
                }
             }
 

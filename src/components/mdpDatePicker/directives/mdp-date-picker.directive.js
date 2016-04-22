@@ -163,18 +163,19 @@
                 }
 
                 if(newVal && !oldVal){
-                    var minDate = moment(scope.minDate);
-                    var afterDate = moment(scope.mdpModel);
-                    if(minDate.isAfter(afterDate)){
-                        ngModel.$setValidity("minDate", false);
-                    }
-                    else{
-                        ngModel.$setValidity("minDate", true);
+                    if(scope.mdpModel){
+                        var minDate = moment(scope.minDate);
+                        var afterDate = moment(scope.mdpModel);
+                        if(minDate.isAfter(afterDate)){
+                            ngModel.$setValidity("minDate", false);
+                            ngModel.$setValidity("required", true);
+                        }
+                        else{
+                            ngModel.$setValidity("minDate", true);
+                        }
                     }
                 }
-
                 if(!newVal && !oldVal){
-                    
                     ngModel.$setValidity("required", false);
                 }
                 if(!newVal && oldVal){
@@ -196,7 +197,7 @@
                     ngModel.$setViewValue(strValue);
                 } else {
                     ngModel.$setValidity("required", false);
-                    ngModel.$setViewValue('');
+                    ngModel.$setViewValue(undefined);
                 }
 
                 ngModel.$render();
@@ -218,7 +219,7 @@
             };
 
             function onInputElementEvents(event) {
-
+            
                 var date = event.target.value;
                 var parts = date.split(".");
                 var day = parseInt(parts[0]);
@@ -243,7 +244,7 @@
                 else{
                     ngModel.$setValidity("invalidFormat", false);
                     ngModel.$setValidity("required", true);
-                    ngModel.$setViewValue(undefined)
+                    ngModel.$setViewValue(undefined);
                 }
             };
 
