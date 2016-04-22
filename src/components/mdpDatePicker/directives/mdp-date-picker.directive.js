@@ -67,9 +67,8 @@
             $transclude(function(clone) {
                 inputContainer.append(clone);
             });
-
+            
             var messages = angular.element(inputContainer[0].querySelector('[ng-messages]'));
-
             scope.type = 'text';
             scope.dateFormat = scope.dateFormat || 'YYYY-MM-DD';
 
@@ -134,16 +133,18 @@
                 if (strValue){
                     inputElement[0].size = strValue.length + 1;
                     inputElement[0].value = strValue;
-                    inputContainerCtrl.setInvalid(false);
+                    
+                    ngModel.$setValidity("required", true);
                 }else{
                     inputElement[0].value = '';
+                    ngModel.$setValidity("required", false);
                 }
                 inputContainerCtrl.setHasValue(!ngModel.$isEmpty(strValue));
             }
 
             //SCOPE DATE WATCH
            scope.$watch('minDate', function(newVal, oldVal, scope){
-                
+            debugger;
                 if(newVal && oldVal){  
                     newVal = moment(newVal);
                     oldVal = moment(oldVal); 
@@ -151,10 +152,11 @@
                         var minDate = moment(scope.minDate);
                         var afterDate = moment(scope.mdpModel);
                         if(minDate.isAfter(afterDate)){
-                            inputContainerCtrl.setInvalid(true);
+                             ngModel.$setValidity("minmax", false);
+                             ngModel.$setValidity("required", true);
                         }
                         else{
-                            inputContainerCtrl.setInvalid(false);
+                            ngModel.$setValidity("minmax", true);
                         }
                     }
                 }
@@ -163,56 +165,15 @@
                     var minDate = moment(scope.minDate);
                     var afterDate = moment(scope.mdpModel);
                     if(minDate.isAfter(afterDate)){
-                        inputContainerCtrl.setInvalid(true);
+                        
                     }
                 }
 
                 if(!newVal){
-                    inputContainerCtrl.setInvalid(true);
+                    
+                    ngModel.$setValidity("required", false);
                 }
             });
-
-           /*scope.$watch('mdpModel', function(newVal, oldVal, scope){
-                if(newVal && oldVal){
-                    newVal = moment(newVal);
-                    oldVal = moment(oldVal);
-                    if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
-                        
-                        if(scope.minDate){
-                            var minDate = moment(scope.minDate);
-                            var afterDate = moment(scope.mdpModel);
-                            if(minDate.isAfter(afterDate) && minDate.startOf('days').isSame(afterDate.startOf('days')))
-                            {
-                               inputContainerCtrl.setInvalid(true);
-                            }
-                        }
-                        else{
-                            inputContainerCtrl.setInvalid(false);
-                        }
-                    }
-                    else{
-                        inputContainerCtrl.setInvalid(false);
-                    }
-                }
-
-                if(newVal && !oldVal){
-                    if(scope.minDate){
-                            var minDate = moment(scope.minDate);
-                            var afterDate = moment(scope.mdpModel);
-                            if(minDate.isAfter(afterDate) && minDate.startOf('days').isSame(afterDate.startOf('days')))
-                            {
-                               inputContainerCtrl.setInvalid(true);
-                            }
-                        }
-                        else{
-                            inputContainerCtrl.setInvalid(false);
-                        }
-                }
-
-                if(!newVal){
-                    inputContainerCtrl.setInvalid(true);
-                }
-           });*/
 
             function updateDate(date) {
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
@@ -227,13 +188,9 @@
                     updateInputElement(strValue, value);
                     ngModel.$setViewValue(strValue);
                 } else {
-                    // updateInputElement(date);
-                    //ngModel.$setViewValue('');
+                    ngModel.$setValidity("required", false);
+                    ngModel.$setViewValue('');
                 }
-
-                if (!ngModel.$pristine &&
-                    messages.hasClass('md-auto-hide') &&
-                    inputContainer.hasClass('md-input-invalid')) messages.removeClass('md-auto-hide');
 
                 ngModel.$render();
             }
@@ -254,8 +211,9 @@
             };
 
             function onInputElementEvents(event) {
+                var date = event.target.get.value;
                 if (event.target.value !== ngModel.$viewVaue){
-                    updateDate(event.target.value);
+                    updateDate(date);
                 }
             };
 

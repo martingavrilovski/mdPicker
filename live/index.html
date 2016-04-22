@@ -52,25 +52,21 @@
                     </div> -->
                     <div>
                         <h4 class="md-subhead">Mask for time example</h4>
-                        <mdp-time-picker mdp-mask="true" name="timeFormat" required mdp-model="maskDate1" ng-model="maskDate1" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
-                            <!-- <div ng-messages="demoForm.timeFormat.$error">
-                               <div ng-message="required">This is required</div>
-                               <div ng-message="format">Invalid format</div>
-                                                       </div> -->
+                        <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-model="maskDate1" ng-model="maskDate1" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" >
+                           <span ng-show="demoForm.timeFormat.$error.required" style="font-size: 11px; color: red">Time is required</span>
+                           <span ng-show="demoForm.timeFormat.$error.invalidFormat" style="font-size: 11px; color: red">Invalid format</span>
                         </mdp-time-picker>
 
-                        <mdp-time-picker mdp-mask="true" name="timeFormat1" mdp-min-time="maskDate1" required mdp-model="maskDate2"  ng-model="maskDate2" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
-                            <div ng-messages="demoForm.timeFormat1.$error">
-                               <div ng-message="required">This is required</div>
-                               <div ng-message="format">Invalid format</div>
-                           </div>
+                        <mdp-time-picker mdp-mask="true" name="timeFormat1" mdp-min-time="maskDate1"md-max-date="maxDate" md-min-date="maskDate1" mdp-model="maskDate2" md-date-filter="dateFilter" ng-model="maskDate2" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" >
+                        <span ng-show="demoForm.timeFormat1.$error.required" style="font-size: 11px; color: red">Time is required</span>
+                        <span ng-show="demoForm.timeFormat1.$error.minmax" style="font-size: 11px; color: red">Invalid time</span>
+                        <span ng-show="demoForm.timeFormat1.$error.invalidFormat" style="font-size: 11px; color: red">Invalid format</span>
                         </mdp-time-picker>
 
-                        <mdp-time-picker mdp-mask="true" name="timeFormat2" mdp-min-time="maskDate1" required mdp-model="maskDate3"  ng-model="maskDate3" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
-                            <div ng-messages="demoForm.timeFormat2.$error">
-                               <div ng-message="required">This is required</div>
-                               <div ng-message="format">Invalid format</div>
-                           </div>
+                        <mdp-time-picker mdp-mask="true" name="timeFormat2" mdp-min-time="maskDate1" md-max-date="maxDate" md-min-date="maskDate1" mdp-model="maskDate3"  ng-model="maskDate3" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
+                            <span ng-show="demoForm.timeFormat2.$error.required" style="font-size: 11px; color: red">Time is required</span>
+                            <span ng-show="demoForm.timeFormat2.$error.minmax" style="font-size: 11px; color: red">Invalid time</span>
+                            <span ng-show="demoForm.timeFormat2.$error.invalidFormat" style="font-size: 11px; color: red">Invalid format</span>
                         </mdp-time-picker>
                     </div>
                    <!--  <div>
@@ -91,6 +87,8 @@
                            {{ currentTime | date:'HH:mm' }}
                        </p>
                    </div> -->
+
+
                 </div>
                 <div layout-padding>
                     <h2>Date picker</h2>
@@ -118,27 +116,20 @@
                        <!--  <mdp-date-picker mdp-mask="true" mdp-max-date="maskDate2" mdp-min-date="maskDate1" mdp-model="maskDate" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate" mdp-format="DD.MM.YYYY"></mdp-date-picker>
                         -->
                             
-                        <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-model="maskDate1" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate1" mdp-format="DD.MM.YYYY">
-                            <!-- <div ng-messages="demoForm.dateFormat.$error">
-                                <div ng-message="required">This is required</div>
-                                <div ng-message="format">Invalid format</div>
-                            </div> -->
+                        <mdp-date-picker mdp-mask="true" name="dateFormat1" mdp-max-date="maxDate" md-max-date="maxDate" mdp-model="maskDate1" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate1" mdp-format="DD.MM.YYYY">
+                            <div ng-show="demoForm.dateFormat1.$error.required" style="font-size: 11px; color: red">Date is required</div>
                         </mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate1"></input>
 
-                        <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate2" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate2" mdp-format="DD.MM.YYYY">
-                             <div ng-messages="demoForm.dateFormat.$error">
-                                <div ng-message="required">This is required</div>
-                                <div ng-message="format">Invalid format</div>
-                            </div>
+                        <mdp-date-picker mdp-mask="true" name="dateFormat2" mdp-max-date="maxDate" mdp-min-date="maskDate1" md-max-date="maxDate" md-min-date="maskDate1" mdp-model="maskDate2" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate2" mdp-format="DD.MM.YYYY">
+                            <div ng-show="demoForm.dateFormat2.$error.required" style="font-size: 11px; color: red">Date is required</div>
+                            <span ng-show="demoForm.dateFormat2.$error.minmax" style="font-size: 11px; color: red">Invalid date</span>
                         </mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate2"></input>
 
-                         <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate3" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate3" mdp-format="DD.MM.YYYY"> 
-                            <div ng-messages="demoForm.dateFormat.$error">
-                                <div ng-message="required">This is required</div>
-                                <div ng-message="format">Invalid format</div>
-                            </div>
+                         <mdp-date-picker mdp-mask="true" name="dateFormat3" md-max-date="maxDate" md-min-date="maskDate1" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate3" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate3" mdp-format="DD.MM.YYYY"> 
+                           <div ng-show="demoForm.dateFormat3.$error.required" style="font-size: 11px; color: red">Date is required</div>
+                           <span ng-show="demoForm.dateFormat3.$error.minmax" style="font-size: 11px; color: red">Invalid date</span>
                         </mdp-date-picker>
                         <input type="text" name="date" ng-model="maskDate3"></input>
                     </div>
@@ -159,6 +150,7 @@
                             {{ currentDate | date:'shortDate' }}
                         </p>
                     </div> -->
+                   <button ng-disabled="!demoForm.$valid">Submit</button> {{demoForm.$valid}}
                 </div>
                 
             </div>
@@ -198,6 +190,11 @@
                         delete $scope.dateModel;
                         delete $scope.currentTimeText;
                     }
+                }
+
+                $scope.dateFilter = function(){
+                    debugger;
+                    return $scope.maskDate1.isAfter($scope.maskDate2);
                 }
 
                 $scope.showDatePicker = function(ev) {
