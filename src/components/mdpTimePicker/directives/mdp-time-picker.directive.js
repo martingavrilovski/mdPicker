@@ -114,7 +114,16 @@
                     return parsed.toDate();
                 } 
                 else{
-                    return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
+                    if (moment(ngModel.$modelValue).isValid()) {
+                        var originalModel = moment(ngModel.$modelValue);
+                        originalModel.minutes(0);
+                        originalModel.hours(0);
+                        originalModel.seconds(0);
+
+                        return originalModel.toDate();
+                    }else{
+                        return null;
+                    }
                 }
             });
 
@@ -146,7 +155,7 @@
                     ngModel.$setViewValue(strValue);
                 } else {
                     // updateInputElement(time);
-                    // ngModel.$setViewValue(scope.resetFormat);
+                    ngModel.$setViewValue('');
                 }
 
                 if (!ngModel.$pristine &&
