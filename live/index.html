@@ -56,14 +56,20 @@
                         </mdp-date-picker>
                     </div> -->
                     <div>
-                        <h4 class="md-subhead">Mask for date example</h4>
+                        <h4 class="md-subhead">Incident date</h4>
                        <!--  <mdp-date-picker mdp-mask="true" mdp-max-date="maskDate2" mdp-min-date="maskDate1" mdp-model="maskDate" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate" mdp-format="DD.MM.YYYY"></mdp-date-picker>
                         -->
 
-                        <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-parent-min-date="maskDate2" mdp-model="maskDate1" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate1" mdp-format="DD.MM.YYYY"></mdp-date-picker>
-                        <input type="text" name="date" ng-model="maskDate1"></input>
-                        <mdp-date-picker mdp-mask="true" mdp-max-date="maxDate" mdp-min-date="maskDate1"  mdp-model="maskDate2" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate2" mdp-format="DD.MM.YYYY"></mdp-date-picker>
-                        <input type="text" name="date" ng-model="maskDate2"></input>
+                        <mdp-date-picker mdp-mask="true" mdp-max-date="today" mdp-model="incident_time" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="incident_time" mdp-format="DD.MM.YYYY"></mdp-date-picker>
+                        <input type="text" name="date" ng-model="incident_time"></input>
+                        
+                        <h4 class="md-subhead">Vendor date</h4>
+                        <mdp-date-picker mdp-mask="true" mdp-max-date="resolution_time || today" mdp-min-date="incident_time" mdp-model="vendor_time" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="vendor_time" mdp-format="DD.MM.YYYY"></mdp-date-picker>
+                        <input type="text" name="date" ng-model="vendor_time"></input>
+                        
+                        <h4 class="md-subhead">Resolution date</h4>
+                        <mdp-date-picker mdp-mask="true" mdp-max-date="today" mdp-min-date="incident_time"  mdp-model="resolution_time" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="resolution_time" mdp-format="DD.MM.YYYY"></mdp-date-picker>
+                        <input type="text" name="date" ng-model="resolution_time"></input>
                     </div>
                     <!-- <div>
                         <h4 class="md-subhead">Min/max date</h4>
@@ -100,12 +106,19 @@
                         <mdp-time-picker mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" mdp-auto-switch="true" ng-model="currentTime"></mdp-time-picker>
                     </div> -->
                     <div>
-                        <h4 class="md-subhead">Mask for time example</h4>
-                        <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-parent-min-time="maskDate2" required mdp-model="maskDate1" ng-model="maskDate1" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
-                        </mdp-time-picker>
-
-                        <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-min-time="maskDate1" required mdp-model="maskDate2"  ng-model="maskDate2" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
-                        </mdp-time-picker>
+                        <h4 class="md-subhead">Incident time</h4>
+                       <!--  <mdp-date-picker mdp-mask="true" mdp-max-date="maskDate2" mdp-min-date="maskDate1" mdp-model="maskDate" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate" mdp-format="DD.MM.YYYY"></mdp-date-picker>
+                        -->
+                        <mdp-time-picker mdp-mask="true" mdp-model="incident_time" mdp-placeholder="Time(HH:MM)" ng-model="incident_time" mdp-format="HH:mm"></mdp-time-picker>
+                        <input type="text" name="date" ng-model="incident_time"></input>
+                        
+                        <h4 class="md-subhead">Vendor time</h4>
+                        <mdp-time-picker mdp-mask="true" mdp-model="vendor_time" mdp-placeholder="Time(HH:MM)" ng-model="vendor_time" mdp-format="HH:mm"></mdp-time-picker>
+                        <input type="text" name="date" ng-model="vendor_time"></input>
+                        
+                        <h4 class="md-subhead">Resolution time</h4>
+                        <mdp-time-picker mdp-mask="true" mdp-model="resolution_time" mdp-placeholder="Time(HH:MM)" ng-model="resolution_time" mdp-format="HH:mm"></mdp-time-picker>
+                        <input type="text" name="date" ng-model="resolution_time"></input>
                     </div>
                    <!--  <div>
                        <h4 class="md-subhead">Custom format + error messages</h4>
@@ -153,6 +166,10 @@
             '$mdpTimePicker',
             function($scope, $mdpDatePicker, $mdpTimePicker) {
                 window.scopePicker = $scope;
+                $scope.incident_time = moment().subtract(12, 'days');
+                $scope.vendor_time = moment().subtract(13, 'days');
+                $scope.resolution_time = moment().subtract(8, 'days');
+                $scope.today = new Date();
                 $scope.maxDate = new Date((new Date()).setHours(23, 59, 59, 999));
                 $scope.maskDate1 = new Date((new Date()).setHours(23, 58, 59, 999));
                 $scope.minDate = moment().subtract(6, 'days');

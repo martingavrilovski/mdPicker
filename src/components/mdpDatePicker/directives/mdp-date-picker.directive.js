@@ -83,7 +83,6 @@
 
             // update input element if model has changed
             ngModel.$formatters.unshift(function(value) {
-            
                 var date = angular.isDate(value) && moment(value);
                 if (date && date.isValid()){
                     updateInputElement(date.format(scope.dateFormat), value);
@@ -96,19 +95,18 @@
                 return mdpDatePickerService.formatValidator(viewValue, scope.dateFormat);
             };
 
-            ngModel.$validators.minDate = function(modelValue, viewValue) {
-                return mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate);
-            };
+            // ngModel.$validators.minDate = function(modelValue, viewValue) {
+            //     return mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate);
+            // };
 
-            ngModel.$validators.maxDate = function(modelValue, viewValue) {
-                return mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate);
-            };
+            // ngModel.$validators.maxDate = function(modelValue, viewValue) {
+            //     return mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate);
+            // };
 
             ngModel.$validators.filter = function(modelValue, viewValue) {
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
             ngModel.$parsers.unshift(function(value) {
-                debugger;
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
@@ -122,13 +120,15 @@
                         parsed = originalModel;
                     }
 
-                    if (scope.minDate && (parsed.isBefore(scope.minDate) || parsed.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
-                        parsed = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
-                    }
+                    // if (scope.minDate && (parsed.isBefore(scope.minDate) || parsed.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
+                    //     parsed = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
+                    // }
 
                    /* if (scope.maxDate && (parsed.isAfter(scope.maxDate) || parsed.startOf('day').isSame(moment(scope.maxDate).startOf('day')))) {
                         parsed = moment(scope.maxDate, angular.isDate(scope.maxDate) ? null : scope.dateFormat, true).subtract(60,'seconds');
                     }*/
+                    parsed.set('hour', moment(scope.mdpModel).hour());
+                    parsed.set('minute', moment(scope.mdpModel).minute());
 
                     return parsed.toDate();
                 } 
@@ -152,18 +152,19 @@
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
                     strValue = value.format(scope.dateFormat);
 
-                if (scope.minDate && (value.isBefore(scope.minDate) || value.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
-                    value = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
-                    strValue = value.format(scope.dateFormat);
-                }
+                // if (scope.minDate && (value.isBefore(scope.minDate) || value.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
+                //     value = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
+                //     strValue = value.format(scope.dateFormat);
+                // }
                 
-                if(angular.isDate(scope.parentMinDate)){
-                    var AfterDate = moment(scope.parentMinDate);
-                    var minDate = moment(date);
-                    if(minDate.isAfter(AfterDate)){
-                        scope.parentMinDate = "";
-                    }
-                }
+                // if(angular.isDate(scope.parentMinDate)){
+                //     var AfterDate = moment(scope.parentMinDate);
+                //     var minDate = moment(date);
+                //     if(minDate.isAfter(AfterDate)){
+                //         scope.parentMinDate = "";
+                //     }
+                // }
+
                 if (value.isValid()) {
                     updateInputElement(strValue, value);
                     ngModel.$setViewValue(strValue);

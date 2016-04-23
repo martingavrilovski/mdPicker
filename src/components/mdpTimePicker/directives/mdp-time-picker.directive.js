@@ -97,6 +97,12 @@
             ngModel.$parsers.unshift(function(value) {
                 var parsed = moment(value, scope.timeFormat, true);
                 if (parsed.isValid()) {
+                    if (moment(scope.mdpModel).isValid()) {
+                        parsed.set('year', moment(scope.mdpModel).year());
+                        parsed.set('month', moment(scope.mdpModel).month());
+                        parsed.set('date', moment(scope.mdpModel).date());
+                    }
+
                     if (angular.isDate(ngModel.$modelValue)) {
                         var originalModel = moment(ngModel.$modelValue);
                         originalModel.minutes(parsed.minutes());
@@ -106,8 +112,10 @@
                         parsed = originalModel;
                     }
                     return parsed.toDate();
-                } else
+                } 
+                else{
                     return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
+                }
             });
 
             // update input element value

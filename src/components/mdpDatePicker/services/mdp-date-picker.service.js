@@ -23,7 +23,6 @@
         }
 
         function minDateValidator(value, format, minDate) {
-            //debugger;
             if (minDate) {
                 minDate = moment(minDate);
                 var date = angular.isDate(value) ? moment(value) : moment(value, format);
