@@ -154,9 +154,11 @@
                     ngModel.$setViewValue(strValue);
                     ngModel.$setValidity("format", true);
                 } else {
-                    // updateInputElement(time);
-                    ngModel.$setViewValue('');
-                    ngModel.$setValidity("format", false);
+                    if(time.length === 5){
+                        // updateInputElement(time);
+                        ngModel.$setViewValue('');
+                        ngModel.$setValidity("format", false);
+                    }
                 }
 
                 if (!ngModel.$pristine &&
