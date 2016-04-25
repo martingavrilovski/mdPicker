@@ -67,8 +67,9 @@
             $transclude(function(clone) {
                 inputContainer.append(clone);
             });
-            
+
             var messages = angular.element(inputContainer[0].querySelector('[ng-messages]'));
+
             scope.type = 'text';
             scope.dateFormat = scope.dateFormat || 'YYYY-MM-DD';
 
@@ -91,26 +92,21 @@
             });
 
             ngModel.$validators.format = function(modelValue, viewValue) {
-                //ngModel.$setValidity("invalidFormat",mdpDatePickerService.formatValidator(viewValue, scope.dateFormat));
                 return mdpDatePickerService.formatValidator(viewValue, scope.dateFormat);
             };
 
-            ngModel.$validators.minDate = function(modelValue, viewValue) {
-                ngModel.$setValidity("minDate", mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate));
-                return mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate);
-            };
+            // ngModel.$validators.minDate = function(modelValue, viewValue) {
+            //     return mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate);
+            // };
 
-            ngModel.$validators.maxDate = function(modelValue, viewValue) {
-                ngModel.$setValidity("maxDate", mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate));
-                return mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate);
-            };
+            // ngModel.$validators.maxDate = function(modelValue, viewValue) {
+            //     return mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate);
+            // };
 
             ngModel.$validators.filter = function(modelValue, viewValue) {
-                //ngModel.$setValidity("invalidFormat",mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter));
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
             };
             ngModel.$parsers.unshift(function(value) {
-
                 var parsed = moment(value, scope.dateFormat, true);
                 
                 if (parsed.isValid()) {
@@ -123,12 +119,21 @@
 
                         parsed = originalModel;
                     }
+
+                    // if (scope.minDate && (parsed.isBefore(scope.minDate) || parsed.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
+                    //     parsed = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
+                    // }
+
+                   /* if (scope.maxDate && (parsed.isAfter(scope.maxDate) || parsed.startOf('day').isSame(moment(scope.maxDate).startOf('day')))) {
+                        parsed = moment(scope.maxDate, angular.isDate(scope.maxDate) ? null : scope.dateFormat, true).subtract(60,'seconds');
+                    }*/
+                    parsed.set('hour', moment(scope.mdpModel).hour());
+                    parsed.set('minute', moment(scope.mdpModel).minute());
+
                     return parsed.toDate();
                 } 
-                else if(angular.isDate(ngModel.$modelValue)){
-                    return ngModel.$modelValue;
-                }
-
+                // else
+                //     return angular.isDate(ngModel.$modelValue) ? ngModel.$modelValue : null;
             });
 
             // update input element value
@@ -136,73 +141,46 @@
                 if (strValue){
                     inputElement[0].size = strValue.length + 1;
                     inputElement[0].value = strValue;
-                    
-                    ngModel.$setValidity("required", true);
+
                 }else{
                     inputElement[0].value = '';
-                    ngModel.$setValidity("required", false);
                 }
                 inputContainerCtrl.setHasValue(!ngModel.$isEmpty(strValue));
             }
-
-            //SCOPE DATE WATCH
-           scope.$watch('minDate', function(newVal, oldVal, scope){
-                if(newVal && oldVal){  
-                    newVal = moment(newVal);
-                    oldVal = moment(oldVal); 
-                   if(newVal.isAfter(oldVal) || newVal.isBefore(oldVal)){
-                        var minDate = moment(scope.minDate);
-                        var afterDate = moment(scope.mdpModel);
-                        if(minDate.isAfter(afterDate)){  
-                            ngModel.$setValidity("minDate", false);
-                        }
-                        else{
-                            ngModel.$setValidity("minDate", true);
-                        }
-                    }
-                }
-
-                if(newVal && !oldVal){
-                    var minDate = moment(scope.minDate);
-                    var afterDate = moment(scope.mdpModel);
-                    if(minDate.isAfter(afterDate)){
-                        ngModel.$setValidity("minDate", false);
-                    }
-                    else{
-                        ngModel.$setValidity("minDate", true);
-                    }
-                }
-
-                if(!newVal && !oldVal){
-                    
-                    ngModel.$setValidity("required", false);
-                }
-                if(!newVal && oldVal){
-                    ngModel.$setValidity("minDate", true);
-                }
-            });
 
             function updateDate(date) {
                 var value = moment(date, angular.isDate(date) ? null : scope.dateFormat, true),
                     strValue = value.format(scope.dateFormat);
 
-                if (scope.minDate && (value.isBefore(scope.minDate) && value.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
-                    value = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
-                    strValue = value.format(scope.dateFormat);
-                }
+                // if (scope.minDate && (value.isBefore(scope.minDate) || value.startOf('day').isSame(moment(scope.minDate).startOf('day')))) {
+                //     value = moment(scope.minDate, angular.isDate(scope.minDate) ? null : scope.dateFormat, true).add(60,'seconds');
+                //     strValue = value.format(scope.dateFormat);
+                // }
+                
+                // if(angular.isDate(scope.parentMinDate)){
+                //     var AfterDate = moment(scope.parentMinDate);
+                //     var minDate = moment(date);
+                //     if(minDate.isAfter(AfterDate)){
+                //         scope.parentMinDate = "";
+                //     }
+                // }
 
                 if (value.isValid()) {
                     updateInputElement(strValue, value);
                     ngModel.$setViewValue(strValue);
                 } else {
-                    ngModel.$setValidity("required", false);
+                    // updateInputElement(date);
                     ngModel.$setViewValue('');
                 }
+
+                if (!ngModel.$pristine &&
+                    messages.hasClass('md-auto-hide') &&
+                    inputContainer.hasClass('md-input-invalid')) messages.removeClass('md-auto-hide');
 
                 ngModel.$render();
             }
             
-          if (scope.mdpModel) {
+            if (scope.mdpModel) {
                 var value = moment(scope.mdpModel, angular.isDate(scope.mdpModel) ? null : scope.dateFormat, true);
                 scope.strValue = value.format(scope.dateFormat);
             }
@@ -218,32 +196,8 @@
             };
 
             function onInputElementEvents(event) {
-
-                var date = event.target.value;
-                var parts = date.split(".");
-                var day = parseInt(parts[0]);
-                var month = parseInt(parts[1]);
-                if(day < 32 && month < 13){
-                    if(month == 0 || day == 0){
-                        ngModel.$setValidity("invalidFormat", false);
-                        ngModel.$setValidity("required", true);
-                    }
-                    else{
-                        ngModel.$setValidity("invalidFormat", true);
-                        if (date !== ngModel.$viewVaue){
-                            updateDate(date);
-                        }
-                    }
-                }
-                else if(parts == ""){
-                    ngModel.$setValidity("invalidFormat", true);
-                    ngModel.$setValidity("required", false);
-                    ngModel.$setViewValue(undefined);
-                }
-                else{
-                    ngModel.$setValidity("invalidFormat", false);
-                    ngModel.$setValidity("required", true);
-                    ngModel.$setViewValue(undefined)
+                if (event.target.value !== ngModel.$viewVaue){
+                    updateDate(event.target.value);
                 }
             };
 
