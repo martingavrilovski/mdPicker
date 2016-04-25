@@ -93,7 +93,6 @@
                 return !viewValue || angular.isDate(viewValue) || moment(viewValue, scope.timeFormat, true).isValid();
             };
 
-
             ngModel.$parsers.unshift(function(value) {
                 var parsed = moment(value, scope.timeFormat, true);
                 if (parsed.isValid()) {
@@ -153,9 +152,11 @@
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
+                    ngModel.$setValidity("format", true);
                 } else {
                     // updateInputElement(time);
                     ngModel.$setViewValue('');
+                    ngModel.$setValidity("format", false);
                 }
 
                 if (!ngModel.$pristine &&
@@ -184,6 +185,9 @@
             function onInputElementEvents(event) {
                 if (event.target.value !== ngModel.$viewVaue)
                     updateTime(event.target.value);
+                if(event.target.value === ""){
+                    ngModel.$setValidity("format", true);
+                }
             }
 
             inputElement.on('reset input blur', onInputElementEvents);
