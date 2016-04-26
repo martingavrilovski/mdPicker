@@ -91,10 +91,10 @@
                 }
             });
 
-       /*     ngModel.$validators.format = function(modelValue, viewValue) {
+        /*  ngModel.$validators.format = function(modelValue, viewValue) {
                 return mdpDatePickerService.formatValidator(viewValue, scope.dateFormat);
             };
-*/
+        */
             ngModel.$validators.minDate = function(modelValue, viewValue) {
                 ngModel.$setValidity("minDate", mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate));
                 return mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate);
