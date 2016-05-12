@@ -94,16 +94,15 @@
         /*  ngModel.$validators.format = function(modelValue, viewValue) {
                 return mdpDatePickerService.formatValidator(viewValue, scope.dateFormat);
             };
-        */
-            ngModel.$validators.minDate = function(modelValue, viewValue) {
-                ngModel.$setValidity("minDate", mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate));
-                return mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate);
-            };
 
-            ngModel.$validators.maxDate = function(modelValue, viewValue) {
-                ngModel.$setValidity("maxDate", mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate));
-                return mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate);
-            };
+        */
+            // ngModel.$validators.minDate = function(modelValue, viewValue) {
+            //     return mdpDatePickerService.minDateValidator(viewValue, scope.dateFormat, scope.minDate);
+            // };
+
+            // ngModel.$validators.maxDate = function(modelValue, viewValue) {
+            //     return mdpDatePickerService.maxDateValidator(viewValue, scope.dateFormat, scope.maxDate);
+            // };
 
            /* ngModel.$validators.filter = function(modelValue, viewValue) {
                 return mdpDatePickerService.filterValidator(viewValue, scope.dateFormat, scope.dateFilter);
