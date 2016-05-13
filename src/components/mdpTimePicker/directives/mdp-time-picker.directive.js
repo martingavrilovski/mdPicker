@@ -45,7 +45,6 @@
                 'disabled': '=?mdpDisabled',
                 'mdpMask': '=',
                 'mdpModel': '=mdpModel',
-                'parentMinTime': '=mdpParentMinTime',
                 'minTime': '=mdpMinTime'
                             },
             link: linkFn
@@ -113,16 +112,7 @@
                     return parsed.toDate();
                 } 
                 else{
-                    if (moment(ngModel.$modelValue).isValid()) {
-                        var originalModel = moment(ngModel.$modelValue);
-                        originalModel.minutes(0);
-                        originalModel.hours(0);
-                        originalModel.seconds(0);
-
-                        return originalModel.toDate();
-                    }else{
-                        return null;
-                    }
+                    return null;
                 }
             });
 
@@ -140,24 +130,16 @@
             function updateTime(time) {
                 var value = moment(time, angular.isDate(time) ? null : scope.timeFormat, true),
                     strValue = value.format(scope.timeFormat);
-
-                /*if (angular.isDate(scope.parentMinTime)) {
-                    var AfterTime = moment(scope.parentMinTime);
-                    var minTime = moment(scope.mdpModel);
-                    if (minTime.isAfter(AfterTime) || minTime.isSame(AfterTime)) {
-                        scope.parentMinTime = "";
-                    }
-                }*/
                 
                 if (value.isValid()) {
                     updateInputElement(strValue);
                     ngModel.$setViewValue(strValue);
-                    ngModel.$setValidity("format", true);
+                    ngModel.$setValidity("validFormat", true);
                 } else {
                     if(time.length === 5){
                         // updateInputElement(time);
                         ngModel.$setViewValue('');
-                        ngModel.$setValidity("format", false);
+                        ngModel.$setValidity("validFormat", false);
                     }
                 }
 
@@ -188,7 +170,7 @@
                 if (event.target.value !== ngModel.$viewVaue)
                     updateTime(event.target.value);
                 if(event.target.value === ""){
-                    ngModel.$setValidity("format", true);
+                    ngModel.$setValidity("validFormat", true);
                 }
             }
 

@@ -51,22 +51,23 @@
                         <mdp-time-picker mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" mdp-auto-switch="true" ng-model="currentTime"></mdp-time-picker>
                     </div> -->
                     <div>
-                        <h4 class="md-subhead">Mask for time example</h4>
-                        <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-model="maskDate1" ng-model="maskDate1" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" >
-                           <span ng-show="demoForm.timeFormat.$error.required" style="font-size: 11px; color: red">Time is required</span>
-                           <span ng-show="demoForm.timeFormat.$error.invalidFormat" style="font-size: 11px; color: red">Invalid format</span>
-                        </mdp-time-picker>
 
-                        <mdp-time-picker mdp-mask="true" name="timeFormat1" mdp-min-time="maskDate1"md-max-date="maxDate" md-min-date="maskDate1" mdp-model="maskDate2" md-date-filter="dateFilter" ng-model="maskDate2" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" >
-                        <span ng-show="demoForm.timeFormat1.$error.required" style="font-size: 11px; color: red">Time is required</span>
-                        <span ng-show="demoForm.timeFormat1.$error.minmax" style="font-size: 11px; color: red">Invalid time</span>
-                        <span ng-show="demoForm.timeFormat1.$error.invalidFormat" style="font-size: 11px; color: red">Invalid format</span>
+                        <h4 class="md-subhead">Incident time</h4>
+                        <mdp-time-picker mdp-mask="true" name="timeFormat" mdp-model="incident_time" ng-model="incident_time" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" >
+                           <span ng-show="demoForm.timeFormat.$error.validFormat" style="font-size: 11px; color: red">Invalid format</span>
                         </mdp-time-picker>
-
-                        <mdp-time-picker mdp-mask="true" name="timeFormat2" mdp-min-time="maskDate1" md-max-date="maxDate" md-min-date="maskDate1" mdp-model="maskDate3"  ng-model="maskDate3" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
-                            <span ng-show="demoForm.timeFormat2.$error.required" style="font-size: 11px; color: red">Time is required</span>
+                        
+                      <!--   <h4 class="md-subhead">Vendor date</h4>
+                      <mdp-time-picker mdp-mask="true" name="timeFormat1" mdp-min-time="maskDate1"md-max-date="maxDate" md-min-date="maskDate1" mdp-model="maskDate2" md-date-filter="dateFilter" ng-model="maskDate2" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" >
+                      <span ng-show="demoForm.timeFormat1.$error.required" style="font-size: 11px; color: red">Time is required</span>
+                      <span ng-show="demoForm.timeFormat1.$error.minmax" style="font-size: 11px; color: red">Invalid time</span>
+                      <span ng-show="demoForm.timeFormat1.$error.invalidFormat" style="font-size: 11px; color: red">Invalid format</span>
+                      </mdp-time-picker> -->
+                        </br>
+                        <h4 class="md-subhead">Resolution time</h4>
+                        <mdp-time-picker mdp-mask="true" name="timeFormat2" mdp-min-time="incident_time" mdp-model="resolution_time"  ng-model="resolution_time" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
                             <span ng-show="demoForm.timeFormat2.$error.minmax" style="font-size: 11px; color: red">Invalid time</span>
-                            <span ng-show="demoForm.timeFormat2.$error.invalidFormat" style="font-size: 11px; color: red">Invalid format</span>
+                            <span ng-show="demoForm.timeFormat2.$error.validFormat" style="font-size: 11px; color: red">Invalid format</span>
                         </mdp-time-picker>
                     </div>
                    <!--  <div>
@@ -121,13 +122,13 @@
                         </mdp-date-picker>
                         <input type="text" name="date" ng-model="incident_time"></input>
                         
-                        <h4 class="md-subhead">Vendor date</h4>
-                        <mdp-date-picker mdp-mask="true" name="dateForm2" mdp-max-date="resolution_time || today" mdp-min-date="incident_time" mdp-model="vendor_time" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="vendor_time" mdp-format="DD.MM.YYYY">
-                            <span ng-show="demoForm.dateForm2.$error.format" style="font-size: 11px; color: red;">Invalid date format</span>
-                            <span ng-show="demoForm.dateForm2.$error.minDate" style="font-size: 11px; color: red;">Min date exceeded</span>
-                            <span ng-show="demoForm.dateForm2.$error.maxDate" style="font-size: 11px; color: red;">Max date exceeded</span>
-                        </mdp-date-picker>
-                        <input type="text" name="date" ng-model="vendor_time"></input>
+                     <!--    <h4 class="md-subhead">Vendor date</h4>
+                     <mdp-date-picker mdp-mask="true" name="dateForm2" mdp-max-date="resolution_time || today" mdp-min-date="incident_time" mdp-model="vendor_time" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="vendor_time" mdp-format="DD.MM.YYYY">
+                         <span ng-show="demoForm.dateForm2.$error.format" style="font-size: 11px; color: red;">Invalid date format</span>
+                         <span ng-show="demoForm.dateForm2.$error.minDate" style="font-size: 11px; color: red;">Min date exceeded</span>
+                         <span ng-show="demoForm.dateForm2.$error.maxDate" style="font-size: 11px; color: red;">Max date exceeded</span>
+                     </mdp-date-picker>
+                     <input type="text" name="date" ng-model="vendor_time"></input> -->
                         
                         <h4 class="md-subhead">Resolution date</h4>
                         <mdp-date-picker mdp-mask="true" name="dateForm3" mdp-max-date="today" mdp-min-date="incident_time"  mdp-model="resolution_time" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="resolution_time" mdp-format="DD.MM.YYYY">
@@ -136,9 +137,6 @@
                             <span ng-show="demoForm.dateForm3.$error.maxDate" style="font-size: 11px; color: red;">Max date exceeded</span>
                         </mdp-date-picker>
                         <input type="text" name="date" ng-model="resolution_time"></input>
-
-                            
-  
                     </div>
                     <!-- <div>
                         <h4 class="md-subhead">Min/max date</h4>
@@ -159,65 +157,6 @@
                     </div> -->
                    <button ng-disabled="!demoForm.$valid">Submit</button> {{demoForm.$valid}}
                 </div>
-                <div layout-padding>
-                     <h2>Time picker</h2>
-                    <!-- <div>
-                        <h4 class="md-subhead">Standard time picker</h4>
-                        <mdp-time-picker mdp-placeholder="Time" ng-model="currentTime"></mdp-time-picker>
-                    </div>
-                    <div>
-                        <h4 class="md-subhead">Standard time picker (disabled)</h4>
-                        <mdp-time-picker mdp-disabled="!isEnabledTime" ng-model="currentTime" mdp-placeholder="Time (HH:MM)"></mdp-time-picker>
-                        Enable time:
-                        <input type="checkbox" ng-model="isEnabledTime"></input>
-                    </div>
-                    <div>
-                        <h4 class="md-subhead">Auto switch between hours and minutes</h4>
-                        <mdp-time-picker mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm" mdp-auto-switch="true" ng-model="currentTime"></mdp-time-picker>
-                    </div> -->
-                    <div>
-                        <h4 class="md-subhead">Incident time</h4>
-                       <!--  <mdp-date-picker mdp-mask="true" mdp-max-date="maskDate2" mdp-min-date="maskDate1" mdp-model="maskDate" mdp-placeholder="Date (DD.MM.YYYY)" ng-model="maskDate" mdp-format="DD.MM.YYYY"></mdp-date-picker>
-                        -->
-                        <mdp-time-picker name="timeForm1" mdp-mask="true" mdp-model="incident_time" mdp-placeholder="Time(HH:MM)" ng-model="incident_time" mdp-format="HH:mm">
-                            <span ng-show="demoForm.timeForm1.$error.format" style="font-size: 11px; color: red;">Invalid time format</span>
-                        </mdp-time-picker>
-                        <input type="text" name="date" ng-model="incident_time"></input>
-                        
-                        <h4 class="md-subhead">Vendor time</h4>
-                        <mdp-time-picker mdp-mask="true" name="timeForm2" mdp-model="vendor_time" mdp-placeholder="Time(HH:MM)" ng-model="vendor_time" mdp-format="HH:mm">
-                            <span ng-show="demoForm.timeForm2.$error.format" style="font-size: 11px; color: red;">Invalid time format</span>
-                            
-                        </mdp-time-picker>
-                        <input type="text" name="date" ng-model="vendor_time"></input>
-                        
-                        <h4 class="md-subhead">Resolution time</h4>
-                        <mdp-time-picker mdp-mask="true" name="timeForm3" mdp-model="resolution_time" mdp-placeholder="Time(HH:MM)" ng-model="resolution_time" mdp-format="HH:mm">
-                            <span ng-show="demoForm.timeForm3.$error.format" style="font-size: 11px; color: red;">Invalid time format</span>
-                            
-                        </mdp-time-picker>
-                        <input type="text" name="date" ng-model="resolution_time"></input>
-                    </div>
-                   <!--  <div>
-                       <h4 class="md-subhead">Custom format + error messages</h4>
-                       <mdp-time-picker name="timeFormat" required ng-model="currentTimeText" mdp-placeholder="Time (HH:MM)" mdp-format="HH:mm">
-                           <div ng-messages="demoForm.timeFormat.$error">
-                               <div ng-message="required">This is required</div>
-                               <div ng-message="format">Invalid format</div>
-                           </div>
-                       </mdp-time-picker>
-                       Remove model:
-                       <input type="checkbox" ng-model="isEnabledCustom" ng-change="onChangeCheckbox(isEnabledCustom, currentTimeText)"></input>
-                   </div>
-                   <div>
-                       <h4 class="md-subhead">Using $mdpTimePicker service</h4>
-                       <md-button class="md-raised md-warn" ng-click="showTimePicker($event)" aria-label="show picker">show picker</md-button>
-                       <p>
-                           {{ currentTime | date:'HH:mm' }}
-                       </p>
-                   </div> -->
-                </div>
-
             </div>
         </md-content>
     </md-content>
@@ -246,9 +185,9 @@
             function($scope, $mdpDatePicker, $mdpTimePicker) {
 
                 window.scopePicker = $scope;
-                $scope.incident_time = moment().subtract(12, 'days');
+                //$scope.incident_time = moment().subtract(12, 'days');
                 $scope.vendor_time = moment().subtract(13, 'days');
-                $scope.resolution_time = moment().subtract(8, 'days');
+                //$scope.resolution_time = moment().subtract(8, 'days');
                 $scope.today = new Date();
                 $scope.maxDate = new Date((new Date()).setHours(23, 59, 59, 999));
                 //$scope.maskDate1 = new Date((new Date()).setHours(23, 58, 59, 999));
@@ -259,15 +198,11 @@
                         delete $scope.currentTimeText;
                     }
                 }
-<<<<<<< HEAD
-=======
 
                 $scope.dateFilter = function(){
                     debugger;
                     return $scope.maskDate1.isAfter($scope.maskDate2);
                 }
-
->>>>>>> master
                 $scope.showDatePicker = function(ev) {
                     $mdpDatePicker($scope.currentDate, {
                         targetEvent: ev
