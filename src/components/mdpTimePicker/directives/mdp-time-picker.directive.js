@@ -34,7 +34,7 @@
                     '<md-icon md-svg-icon="mdp-access-time"></md-icon>' +
                     '</md-button>' +
                     '<md-input-container flex' + (noFloat ? ' md-no-float' : '') + ' md-is-error="isError()">' +
-                    '<input ng-disabled="disabled"' + mask + ' ng-model="strValue" type="{{ ::type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
+                    '<input ng-disabled="disabled" ng-model="strValue" type="{{ ::type }}" aria-label="' + placeholder + '" placeholder="' + placeholder + '"' + (openOnClick ? ' ng-click="showPicker($event)" ' : '') + ' />' +
                     '</md-input-container>' +
                     '</div>';
             },
@@ -64,7 +64,7 @@
 
             var messages = angular.element(inputContainer[0].querySelector('[ng-messages]'));
 
-            scope.type = 'text';
+            scope.type = 'time';
             scope.timeFormat = scope.timeFormat || 'HH:mm';
             scope.autoSwitch = scope.autoSwitch || false;
             //scope.resetFormat = scope.timeFormat.replace(/\w/g, '0');
